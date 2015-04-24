@@ -1,0 +1,20 @@
+from django.db import models
+from django.contrib.auth.models import User
+# Create your models here.
+
+class Song(models.Model):
+	def __unicode__(self):
+		return self.title
+
+	title = models.CharField(max_length=255)
+	singer = models.CharField(max_length=255)
+	pic_link = models.CharField(max_length=255)
+	song_link = models.CharField(max_length=255)
+	lrc_link = models.CharField(max_length=255)
+
+class UserSong(models.Model):
+	def __unicode__(self):
+		return self.title
+
+	user = models.ForeignKey(User)
+	song = models.ForeignKey(Song)

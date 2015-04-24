@@ -1,0 +1,28 @@
+{% extends "base.html" %} 
+
+{% block cdn %}
+{% endblock %}
+
+{% block find %}
+	class="active"
+{% endblock %}
+
+
+{% block content %} 
+<div class="row">
+  <div class="col-xs-6 col-md-4">
+    <img src="{{ MEDIA_URL }}{{song.pic_link}}" width="155" height="155" class="img-responsive" alt="Responsive image">
+  </div>
+  <div class="col-xs-12 col-md-8">
+    <div id="title">
+      <h2>{{song.title}}</h2>
+      <h3>{{song.singer}}</h3>
+      <h4><a href="/mymusic/play?id={{song.pk}}"><span class="glyphicon glyphicon-play-circle" aria-hidden="true">立即播放</span></a></h4>
+      <h4><a href="/mymusic/favour?id={{song.pk}}"><span class="glyphicon glyphicon-heart" aria-hidden="true">收藏</span></a></h4>
+    </div>
+    <audio controls="controls">
+      <source src="{{ MEDIA_URL }}{{song.song_link}}" type="audio/mpeg">
+    </audio>
+  </div>
+</div>
+{% endblock %}  

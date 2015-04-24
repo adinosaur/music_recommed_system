@@ -1,0 +1,14 @@
+from django.conf.urls import include, url
+from django.contrib import admin
+
+urlpatterns = [
+    # Examples:
+    # url(r'^$', 'music_recommed_system.views.home', name='home'),
+    # url(r'^blog/', include('blog.urls')),
+
+    url(r'^admin/', include(admin.site.urls)),
+    url(r'^login/$',  views.login),
+    url(r'^logout/$',  views.logout), 
+    url(r'^register/$',  views.register),
+    url(r'^index/$',  views.index),
+]
