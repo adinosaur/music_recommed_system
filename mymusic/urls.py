@@ -6,5 +6,7 @@ urlpatterns = patterns('',
     url(r'^play',  views.play),
     url(r'^create-fav', views.create_fav),
     url(r'^remove-fav', views.remove_fav),
-    url(r'^singer', views.search_singer),
+    url(r'^singer', views.singer),
+    url(r'^search-singer', views.search_singer),
+    url(r'^search-song', views.search_song),
 )

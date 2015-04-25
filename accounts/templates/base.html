@@ -40,6 +40,12 @@
             <ul class="nav navbar-nav">
               <li {% block mine %}{% endblock %}><a href="/mymusic/song-lib/">我的音乐</a></li>
             </ul>
+            <form action="/mymusic/search-song" method="GET" class="navbar-form navbar-left" role="search">
+              <div class="form-group">                
+                <input type="text" name="key" class="form-control" placeholder="搜索音乐，歌手">
+                <button type="submit" class="btn btn-default">搜索</button>
+                </div>
+            </form>
             <ul class="nav navbar-nav navbar-right">
                 <li class="pull-right"><a href="/accounts/logout/">退出</a></li>
             </ul>
