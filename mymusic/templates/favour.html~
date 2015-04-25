@@ -2,7 +2,7 @@
 {% block cdn %}
 
 {% endblock %}
-{% block find %}
+{% block mine %}
 class="active"
 {% endblock %}
 
@@ -15,8 +15,8 @@ class="active"
 		<div class="panel-body" style="padding: 0">
 			<h1 class="panel-title">
 			<li class="list-group-item">
-				<a href="">{{song.title}}</a>
-				<a href="/mymusic/singer?id={{song.singer.id}}">-{{song.singer.name}}</a>
+				<a href="" target="_blank">{{song.title}}</a>
+				<a href="">-{{song.singer}}</a>
 				<a href="/mymusic/play?id={{song.pk}}"><span class="glyphicon glyphicon-headphones" aria-hidden="true"></span></a>
 				<a onclick=send_get_request({{song.pk}}) class="pull-right"><span class="glyphicon glyphicon-heart" aria-hidden="true"></span></a>
 			</li>

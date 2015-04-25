@@ -9,6 +9,7 @@ from django.contrib.auth.decorators import login_required
 from accounts.forms import LoginForm, RegistForm
 from django.views.decorators.csrf import csrf_exempt
 from mymusic.models import Song
+from mymusic.models import Singer
 
 @csrf_exempt
 def register(request):
@@ -91,5 +92,5 @@ def logout(request):
 @login_required
 def index(request):
     songs = Song.objects.all()
-    print len(songs)
-    return render_to_response('index.html', RequestContext(request, {'songs': songs}))
+    return render_to_response('index.html', RequestContext(request, {'songs': songs,
+                                                                     'user': request.user}))    
