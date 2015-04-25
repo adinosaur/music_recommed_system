@@ -144,3 +144,7 @@ def search_song(request):
 										'pre_page': pre_page,
 										'cur_page': cur_page,
 										'nex_page': nex_page}))
+
+@login_required
+def comment(request):
+	return HttpResponse('comment')
