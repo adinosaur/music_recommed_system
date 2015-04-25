@@ -1,0 +1,25 @@
+
+{% extends "base.html" %} 
+
+{% block cdn %}
+{% endblock %}
+
+{% block find %}
+	class="active"
+{% endblock %}
+
+
+{% block content %} 
+<h1>{{song.title}}</h1>
+<h2>{{song.singer}}</h2>
+<form action="" method="POST">
+{% csrf_token %}
+<table>
+<textarea rows="5" cols="50" name="comment"></textarea>
+<input type="submit" value="comment">
+<table>
+</form>
+{% for comment in comments%}
+	<h4>{{comment.user.username}}</h4><h5>{{comment.comment}}</h5><hr>
+{% endfor%}
+{% endblock %}  
