@@ -24,6 +24,19 @@ class="active"
 		</div>
 	</div>
 	{% endfor %}
+	<nav>
+		<ul class="pagination">
+			<li><a href="/mymusic/song-lib?p={{pre_page}}"><span aria-hidden="true">&laquo;</span><span class="sr-only">Previous</span></a></li>
+			{% for page_num in page_nums %}
+				{% ifequal page_num cur_page %}
+				<li class="active"><a href="/mymusic/song-lib?p={{page_num}}">{{ page_num }} </a></li>
+				{% else %}
+				<li><a href="/mymusic/song-lib?p={{page_num}}">{{ page_num }} </a></li>
+				{% endifequal %}
+			{% endfor %}
+			<li><a href="/mymusic/song-lib?p={{nex_page}}"><span aria-hidden="true">&raquo;</span><span class="sr-only">Next</span></a>
+		</ul>
+	</nav>
 </ul>
 
 <script type="text/javascript">
