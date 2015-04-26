@@ -10,19 +10,77 @@
 
 {% block content %} 
 <div class="row">
-  <div class="col-xs-6 col-md-4">
-    <img src="{{ MEDIA_URL }}{{song.pic_link}}" width="155" height="155" class="img-responsive" alt="Responsive image">
-  </div>
   <div class="col-xs-12 col-md-8">
-    <div id="title">
-      <h2>{{song.title}}</h2>
-      <h3>{{song.singer}}</h3>
-      <h4><a href="/mymusic/play?id={{song.pk}}"><span class="glyphicon glyphicon-play-circle" aria-hidden="true">立即播放</span></a></h4>
-      <h4><a href="/mymusic/favour?id={{song.pk}}"><span class="glyphicon glyphicon-heart" aria-hidden="true">收藏</span></a></h4>
-    </div>
-    <audio controls="controls">
-      <source src="{{ MEDIA_URL }}{{song.song_link}}" type="audio/mpeg">
-    </audio>
+      <div class="row">
+        <div class="col-xs-6 col-md-4">
+          <img src="{{ MEDIA_URL }}{{song.pic_link}}" width="155" height="155" class="img-responsive" alt="Responsive image">
+        </div>
+        <div class="col-xs-6 col-md-4">
+          <div id="title">
+            <h2>{{song.title}}</h2>
+            <h3>{{song.singer}}</h3>
+            <h4><a href="/mymusic/play?id={{song.pk}}"><span class="glyphicon glyphicon-play-circle" aria-hidden="true">立即播放</span></a></h4>
+            <h4><a href="/mymusic/favour?id={{song.pk}}"><span class="glyphicon glyphicon-heart" aria-hidden="true">收藏</span></a></h4>
+          </div>
+          <audio controls="controls">
+            <source src="{{ MEDIA_URL }}{{song.song_link}}" type="audio/mpeg">
+          </audio>
+        </div>
+      </div>
+      <div class="row">
+        <div class="page-header">
+          <h3>评论<small>共{{comments_count}}个评论</small></h3>
+        </div>
+        <div class="media">
+          <div class="media-left">
+            <a href="">
+              <img class="media-object" src="{{ MEDIA_URL }}/default.jpg" alt="...">
+            </a>
+          </div>
+          <div class="media-body">
+              <form action="/mymusic/comment/" method="POST">
+              {% csrf_token %}
+                <table>
+                  <textarea class="form-control"  rows="4" name="comment"></textarea>
+                  <input class="btn btn-default pull-right" type="submit" value="提交">
+                  <input name="song_id" value="{{song.pk}}" style="display:none">
+                </table>
+              </form>
+          </div>
+        </div>
+      </div>
+      <!--<h4>{{comment.user.username}}</h4><h5>{{comment.comment}}</h5><hr>-->
+      <div class="page-header">
+          <h3>最近评论</h3>
+        </div>
+      <ul class="media-list">
+        {% for comment in comments%}
+          <li class="media">
+            <div class="media-left">
+              <a href="">
+                <img class="media-object" src="{{ MEDIA_URL }}/default.jpg" alt="...">
+              </a>
+            </div>
+            <div class="media-body">
+              <a herf="">{{comment.user}}</a>:{{comment.comment}}
+              <div>
+              {{comment.time.year}}年{{comment.time.month}}月{{comment.time.day}}日
+              <a href=""><span class="glyphicon glyphicon-thumbs-up pull-right" aria-hidden="true"></span></a>
+              </div>
+            </div>
+        </li>
+        {% endfor %}
+      </ul>
+  </div>
+  <div class="col-xs-6 col-md-4">
+    <ul class="list-group">
+      <li class="list-group-item">喜欢这首歌的人</li>
+      <li class="list-group-item">Cras justo odio</li>
+      <li class="list-group-item">Dapibus ac facilisis in</li>
+      <li class="list-group-item">Morbi leo risus</li>
+      <li class="list-group-item">Porta ac consectetur ac</li>
+      <li class="list-group-item">Vestibulum at eros</li>
+    </ul>
   </div>
 </div>
 {% endblock %}  
