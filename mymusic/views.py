@@ -7,6 +7,10 @@ from django.contrib.auth.decorators import login_required
 from models import Song
 from models import UserSong
 from models import Singer
+from models import SongComment
+
+from datetime import date
+
 from pages_assistant import Page_Assistant
 # Create your views here.
 
@@ -15,7 +19,7 @@ def song_lib(request):
 	if request.method == 'GET':
 		p = request.GET.get('p', 1)
 
-		#将网页分页展示
+		#歌曲分页
 		page_assistant = Page_Assistant(count=UserSong.objects.filter(user=request.user).count(), page_size=20)
 		pre_page = page_assistant.get_pre_page_no(int(p))
 		cur_page = int(p)
@@ -38,9 +42,29 @@ def song_lib(request):
 def play(request):
 	if request.method == 'GET':
 		song_id = request.GET['id']
-		_song = Song.objects.get(pk=song_id)
-		print _song.pic_link
-		return render_to_response('play.html', RequestContext(request, {'song':_song})) 
+		song = Song.objects.get(pk=song_id)
+		p = request.GET.get('p', 1)
+
+		count=SongComment.objects.filter(song=song).count()
+		#评论分页
+		page_assistant = Page_Assistant(count=count, page_size=20)
+		pre_page = page_assistant.get_pre_page_no(int(p))
+		cur_page = int(p)
+		nex_page = page_assistant.get_nex_page_no(int(p))
+		page_nums = page_assistant.get_pages_list(cur_page)
+		b, e = page_assistant.get_objects_by_pageno(cur_page)
+		comments = SongComment.objects.filter(song=song).order_by("-time")[b:e]
+
+		print song.pic_link
+		return render_to_response(
+			'play.html', 
+			RequestContext(request, {	'song': song,
+										'comments': comments,
+										'comments_count': count,
+										'page_nums': page_nums,
+										'pre_page': pre_page,
+										'cur_page': cur_page,
+										'nex_page': nex_page})) 
 
 @login_required
 def create_fav(request):
@@ -74,7 +98,7 @@ def singer(request):
 	if request.method == 'GET':
 		p = request.GET.get('p', 1)
 
-		#将网页分页展示
+		#歌曲分页
 		page_assistant = Page_Assistant(count=Song.objects.filter(singer=request.GET['id']).count(), page_size=20)
 		pre_page = page_assistant.get_pre_page_no(int(p))
 		cur_page = int(p)
@@ -102,7 +126,7 @@ def search_singer(request):
 		print key
 
 		count=Singer.objects.filter(name__contains=key).count()
-		#将网页分页展示
+		#歌手分页
 		page_assistant = Page_Assistant(count=count, page_size=20)
 		pre_page = page_assistant.get_pre_page_no(int(p))
 		cur_page = int(p)
@@ -127,7 +151,7 @@ def search_song(request):
 		p = request.GET.get('p', 1)
 
 		count = Song.objects.filter(title__contains=key).count()
-		#将网页分页展示
+		#歌曲分页
 		page_assistant = Page_Assistant(count=count, page_size=20)
 		pre_page = page_assistant.get_pre_page_no(int(p))
 		cur_page = int(p)
@@ -144,3 +168,26 @@ def search_song(request):
 										'pre_page': pre_page,
 										'cur_page': cur_page,
 										'nex_page': nex_page}))
+
+@login_required
+def comment(request):
+	if request.method == 'POST':
+		songcomment = SongComment()
+		try:
+			song_id = request.POST['song_id']
+		except KeyError:
+			print "wrong song id"
+
+		songcomment.song = Song.objects.get(pk=song_id)
+		songcomment.user = request.user
+		songcomment.comment = request.POST.get('comment', '')
+		songcomment.time = date.today()
+		songcomment.favour = 0
+		songcomment.save()
+
+		return HttpResponseRedirect('/mymusic/play?id=%s' %song_id)
+
+@login_required
+def favour_comment(request):
+	if request.method == 'POST':
+		return HttpResponse('favour_comment')
