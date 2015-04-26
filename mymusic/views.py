@@ -195,5 +195,12 @@ def comment(request):
 
 @login_required
 def favour_comment(request):
-	if request.method == 'POST':
-		return HttpResponse('favour_comment')
+	if request.method == 'GET':
+		try:
+			comment_id = request.GET['id']
+		except KeyError:
+			print "worng comment id"
+		songcomment = SongComment.objects.get(id=comment_id)
+		songcomment.favour+=1
+		songcomment.save()
+		return HttpResponseRedirect('/mymusic/play?id=%s' %songcomment.song_id)

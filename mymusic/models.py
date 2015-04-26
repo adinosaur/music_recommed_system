@@ -34,7 +34,3 @@ class SongComment(models.Model):
 	comment = models.CharField(max_length=255)
 	time = models.DateField()
 	favour = models.IntegerField(default=0)
-
-
-
-
