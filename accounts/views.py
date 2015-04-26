@@ -11,6 +11,7 @@ from django.views.decorators.csrf import csrf_exempt
 from mymusic.models import Song
 from mymusic.models import Singer
 from mymusic.pages_assistant import Page_Assistant
+from models import UserMessage
 
 @csrf_exempt
 def register(request):
@@ -47,6 +48,10 @@ def register(request):
                                                 password=password,
                                                 email=email)   
                 user.save()
+                
+                usermessage = UserMessage()
+                usermessage.user = request.user
+                usermessage.save()
                 return HttpResponseRedirect('/accounts/login/')
             
         return render_to_response(
@@ -112,4 +117,17 @@ def index(request):
                                         'page_nums': page_nums,
                                         'pre_page': pre_page,
                                         'cur_page': cur_page,
-                                        'nex_page': nex_page}))    
+                                        'nex_page': nex_page}))   
+
+@login_required
+def home(request):
+    try:
+        usermessage = UserMessage.objects.get(user=request.user)
+    except UserMessage.DoesNotExist:
+        print "内部错误,不存在的UserMessage"
+
+    return render_to_response(
+            'home.html', 
+            RequestContext(request, {   'user': request.user,
+                                        'head': usermessage.head,
+                                        'intro': usermessage.intro})) 

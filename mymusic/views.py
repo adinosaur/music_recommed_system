@@ -8,6 +8,7 @@ from models import Song
 from models import UserSong
 from models import Singer
 from models import SongComment
+from accounts.models import UserMessage
 
 from datetime import date
 
@@ -28,6 +29,8 @@ def song_lib(request):
 		b, e = page_assistant.get_objects_by_pageno(cur_page)
 		usersongs = UserSong.objects.filter(user=request.user)[b:e]
 		songs = [usersong.song for usersong in usersongs]
+
+		
 
 		return render_to_response(
 			'favour.html', 
@@ -55,10 +58,13 @@ def play(request):
 		b, e = page_assistant.get_objects_by_pageno(cur_page)
 		comments = SongComment.objects.filter(song=song).order_by("-time")[b:e]
 
+		head = UserMessage.objects.get(user=request.user).head
+
 		print song.pic_link
 		return render_to_response(
 			'play.html', 
 			RequestContext(request, {	'song': song,
+										'head': head,
 										'comments': comments,
 										'comments_count': count,
 										'page_nums': page_nums,
