@@ -65,7 +65,7 @@
               <a herf="">{{comment.user}}</a>:{{comment.comment}}
               <div>
               {{comment.time.year}}年{{comment.time.month}}月{{comment.time.day}}日
-              <a href=""><span class="glyphicon glyphicon-thumbs-up pull-right" aria-hidden="true"></span></a>
+              <a href="/mymusic/favour-comment?id={{comment.id}}"><span class="glyphicon glyphicon-thumbs-up pull-right" aria-hidden="true">({{comment.favour}})</span></a>
               </div>
             </div>
         </li>
@@ -74,7 +74,7 @@
   </div>
   <div class="col-xs-6 col-md-4">
     <ul class="list-group">
-      <li class="list-group-item">喜欢这首歌的人</li>
+      <li class="list-group-item">喜欢这首歌的人</li>ss
       <li class="list-group-item">Cras justo odio</li>
       <li class="list-group-item">Dapibus ac facilisis in</li>
       <li class="list-group-item">Morbi leo risus</li>
