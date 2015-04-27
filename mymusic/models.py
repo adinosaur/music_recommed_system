@@ -20,7 +20,7 @@ class Song(models.Model):
 
 class UserSong(models.Model):
 	def __unicode__(self):
-		return self.title
+		return self.song
 
 	user = models.ForeignKey(User)
 	song = models.ForeignKey(Song)
@@ -33,4 +33,11 @@ class SongComment(models.Model):
 	user = models.ForeignKey(User)
 	comment = models.CharField(max_length=255)
 	time = models.DateField()
-	favour = models.IntegerField(default=0)
+	favour = models.IntegerField(default=0) 
+
+class FavComment(models.Model):
+	def __unicode__(self):
+		return self.songcomment
+	songcomment = models.ForeignKey(SongComment)
+	user = models.ForeignKey(User)		
+		

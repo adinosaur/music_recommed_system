@@ -1,6 +1,7 @@
 #coding=utf-8
 from django import forms  
-from django.contrib.auth.models import User  
+from django.contrib.auth.models import User 
+from captcha.fields import CaptchaField
       
 # 登录表单
 class LoginForm(forms.Form):  
@@ -73,6 +74,9 @@ class RegistForm(forms.Form):
                 }  
             ),  
     )
+
+    captcha = CaptchaField()
+    
     def clean(self):  
         if not self.is_valid():  
             raise forms.ValidationError(u"请重新确认填写是否有误")  

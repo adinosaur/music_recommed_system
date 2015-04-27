@@ -50,7 +50,9 @@ def register(request):
                 user.save()
                 
                 usermessage = UserMessage()
-                usermessage.user = request.user
+                
+                print type(request.user)
+                usermessage.user = user
                 usermessage.save()
                 return HttpResponseRedirect('/accounts/login/')
             

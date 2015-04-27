@@ -8,6 +8,7 @@ from models import Song
 from models import UserSong
 from models import Singer
 from models import SongComment
+from models import FavComment
 from accounts.models import UserMessage
 
 from datetime import date
@@ -201,9 +202,20 @@ def favour_comment(request):
 		except KeyError:
 			print "worng comment id"
 		songcomment = SongComment.objects.get(id=comment_id)
-		songcomment.favour+=1
-		songcomment.save()
-		return HttpResponseRedirect('/mymusic/play?id=%s' %songcomment.song_id)
+		try:
+			favcomment = FavComment.objects.get(songcomment_id=comment_id,user=request.user)
+		except  FavComment.DoesNotExist:
+			songcomment.favour+=1
+			songcomment.save()
+			favcomment = FavComment()
+			favcomment.songcomment=songcomment
+			favcomment.user=request.user
+			favcomment.save()
+		else:
+			pass	
+		print  songcomment.song.id
+		print  songcomment.song_id
+		return HttpResponseRedirect('/mymusic/play?id=%s' %songcomment.song.id)
 
 @login_required
 def play_music(request):
