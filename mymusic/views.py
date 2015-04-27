@@ -204,3 +204,12 @@ def favour_comment(request):
 		songcomment.favour+=1
 		songcomment.save()
 		return HttpResponseRedirect('/mymusic/play?id=%s' %songcomment.song_id)
+
+@login_required
+def play_music(request):
+	if request.method == 'GET':
+		song_id = request.GET['id']
+		song = Song.objects.get(pk=song_id)
+		print song_id
+		print song
+		return HttpResponse('play_music')

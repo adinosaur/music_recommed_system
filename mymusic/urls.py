@@ -11,4 +11,5 @@ urlpatterns = patterns('',
     url(r'^search-song', views.search_song),
     url(r'^comment', views.comment),
     url(r'^favour-comment', views.favour_comment),
+    url(r'^playmusic', views.play_music),
 )

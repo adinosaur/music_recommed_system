@@ -19,7 +19,7 @@
           <div id="title">
             <h2>{{song.title}}</h2>
             <h3>{{song.singer}}</h3>
-            <h4><a href="/mymusic/play?id={{song.pk}}"><span class="glyphicon glyphicon-play-circle" aria-hidden="true">立即播放</span></a></h4>
+            <h4><a onclick="send_playmusic_request({{song.pk}})" href="/mymusic/play?id={{song.pk}}"><span class="glyphicon glyphicon-play-circle" aria-hidden="true">立即播放</span></a></h4>
             <h4><a href="/mymusic/favour?id={{song.pk}}"><span class="glyphicon glyphicon-heart" aria-hidden="true">收藏</span></a></h4>
           </div>
           <audio controls="controls">
@@ -83,4 +83,35 @@
     </ul>
   </div>
 </div>
+
+<script type="text/javascript">
+  var xmlhttp;
+
+    function createxmlhttp(){
+
+      if (window.XMLHttpRequest)
+      {// code for IE7+, Firefox, Chrome, Opera, Safari
+        xmlhttp=new XMLHttpRequest();
+      }
+      else
+      {// code for IE6, IE5
+        xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+      }
+
+    }
+
+    function addURLParam(url, name, value){
+      url += (url.indexOf("?") == -1 ? "?" : "&")
+      url += encodeURIComponent(name) + "=" + encodeURIComponent(value);
+      return url;
+    }
+    
+    function send_playmusic_request(value){
+      createxmlhttp();
+      url = "/mymusic/playmusic";
+      url = addURLParam(url, "id", value);
+      xmlhttp.open("get", url, true);
+      xmlhttp.send();
+    }
+</script>
 {% endblock %}  
