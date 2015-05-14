@@ -22,7 +22,7 @@ def register(request):
         })
     else:         
         form = RegistForm(request.POST)
-        register_flag = True
+        register_flag = Tru
         tips_message = ''
 
         if form.is_valid():

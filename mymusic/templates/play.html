@@ -8,23 +8,22 @@
 {% endblock %}
 
 
-{% block content %} 
+{% block content %}
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css"> 
 <div class="row">
   <div class="col-xs-12 col-md-8">
       <div class="row">
-        <div class="col-xs-6 col-md-4">
-          <img src="{{ MEDIA_URL }}music/{{song.pic_link}}" width="100" height="100" class="img-responsive" alt="Responsive image">
+        <div class="col-xs-6 col-md-6">
+          <div id="player"></div>
         </div>
-        <div class="col-xs-6 col-md-4">
+        <div class="col-xs-6 col-md-2"> 
           <div id="title">
             <h2>{{song.title}}</h2>
             <h3>{{song.singer}}</h3>
             <h4><a onclick="send_playmusic_request({{song.pk}})" href="/mymusic/play?id={{song.pk}}"><span class="glyphicon glyphicon-play-circle" aria-hidden="true">立即播放</span></a></h4>
             <h4><a href="/mymusic/favour?id={{song.pk}}"><span class="glyphicon glyphicon-heart" aria-hidden="true">收藏</span></a></h4>
           </div>
-          <audio controls="controls">
-            <source src="{{ MEDIA_URL }}music/{{song.song_link}}" type="audio/mpeg">
-          </audio>
+          <link rel="stylesheet" href="http://cdn.bootcss.com/font-awesome/4.3.0/css/font-awesome.css">
         </div>
       </div>
       <div class="row">
@@ -38,12 +37,12 @@
             </a>
           </div>
           <div class="media-body">
-              <form action="/mymusic/comment/" method="POST">
+              <form id="comment-form">
               {% csrf_token %}
                 <table>
-                  <textarea class="form-control"  rows="4" name="comment"></textarea>
-                  <input class="btn btn-default pull-right" type="submit" value="提交">
-                  <input name="song_id" value="{{song.pk}}" style="display:none">
+                  <textarea class="form-control"  rows="4" id="comment"></textarea>
+                  <input onclick="send_comment()" class="btn btn-primary pull-right" type="button" value="提交">
+                  <input id="song_id" value="{{song.pk}}" style="display:none">
                 </table>
               </form>
           </div>
@@ -53,7 +52,7 @@
       <div class="page-header">
           <h3>最近评论</h3>
         </div>
-      <ul class="media-list">
+      <ul class="media-list" id="comment-List">
         {% for comment in comments%}
           <li class="media">
             <div class="media-left">
@@ -65,27 +64,45 @@
               <a herf="">{{comment.user}}</a>:{{comment.comment}}
               <div>
               {{comment.time.year}}年{{comment.time.month}}月{{comment.time.day}}日
-              <a href="/mymusic/favour-comment?id={{comment.id}}"><span class="glyphicon glyphicon-thumbs-up pull-right" aria-hidden="true">({{comment.favour}})</span></a>
+              <a onclick="favourComment({{comment.id}})" href="javascript:void(0);"><span class="glyphicon glyphicon-thumbs-up pull-right" aria-hidden="true">({{comment.favour}})</span></a>
               </div>
             </div>
         </li>
         {% endfor %}
       </ul>
   </div>
-  <div class="col-xs-6 col-md-4">
-    <ul class="list-group">
-      <li class="list-group-item">喜欢这首歌的人</li>
-      <li class="list-group-item">Cras justo odio</li>
-      <li class="list-group-item">Dapibus ac facilisis in</li>
-      <li class="list-group-item">Morbi leo risus</li>
-      <li class="list-group-item">Porta ac consectetur ac</li>
-      <li class="list-group-item">Vestibulum at eros</li>
-    </ul>
-  </div>
 </div>
-
 <script type="text/javascript">
-  var xmlhttp;
+    var xmlhttp;
+
+    function formateDate(date) {
+        var y = date.getFullYear();
+        var m = date.getMonth() + 1;
+        var d = date.getDate();
+        var h = date.getHours();
+        var mi = date.getMinutes();
+        m = m > 9 ? m : '0' + m;
+        return y + '日' + m + '月' + d + '日 ' + h + ':' + mi;
+    }
+
+    function reply(comment) {
+        var commentList = document.getElementById('comment-List');  
+        var commentBox = document.createElement('li');
+        commentBox.className = 'media';
+        commentBox.innerHTML =
+            '<div class="media-left">' +
+              '<a href="">' +
+                '<img class="media-object" src="{{ MEDIA_URL }}heads/{{head}}" alt="..."></a>' +
+            '</div>' +
+            '<div class="media-body">' + 
+              '<a herf="">{{user}}</a>:' + comment +
+              '<div>' +
+              formateDate(new Date()) +
+              '<a href="#"><span class="glyphicon glyphicon-thumbs-up pull-right" aria-hidden="true">(0)</span></a>'+
+              '</div>' +
+            '</div>'
+        commentList.appendChild(commentBox);
+    }
 
     function createxmlhttp(){
 
@@ -113,5 +130,67 @@
       xmlhttp.open("get", url, true);
       xmlhttp.send();
     }
+
+    function send_comment(){ 
+      var comment=document.getElementById("comment").value;
+      if (comment != ""){
+        createxmlhttp();
+        url = "/mymusic/comment";
+        xmlhttp.open("post", url, true);
+        xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+
+        var songId = document.getElementById("song_id").value;
+        var queryString = "comment=" + comment +"&song_id=" + songId;
+        xmlhttp.send(queryString);
+        //alert(queryString);
+        reply(comment);
+        return false;
+      }
+    }
+
+    function favourComment(commentID){ 
+        createxmlhttp();
+        url = "/mymusic/favour-comment";
+        url = addURLParam(url, "id", commentID);
+        xmlhttp.open("get", url, true);
+        xmlhttp.send();
+        //reply(comment);
+        return false;
+    }
 </script>
+<script src= "{{ STATIC_URL }}h5player/dist/player-with-css.min.js"></script>          
+<script>
+  function heredoc(fn) {
+    return fn.toString().split('\n').slice(1,-1).join('\n') + '\n'
+  }
+  var tmpl = heredoc(function(){/*{{ songLyric }}*/});
+  {% load staticfiles %}
+  var player = new Player({
+  container: document.getElementById('player'),
+    image: '{{ MEDIA_URL }}music/{{song.pic_link}}',
+    //theme: 'simple',
+    classes: {
+      list: 'fa fa-list',
+      prev: 'fa fa-step-forward',
+      play: 'fa fa-play',
+      next: 'fa fa-step-forward',
+      pause: 'fa fa-pause',
+    }
+  });
+  player.setSongs([
+  {
+    name: '{{ song.title }}',
+    url: '{{ MEDIA_URL }}music/{{song.song_link}}',
+    artist: '{{ song.singer }}',
+    image: '{{ MEDIA_URL }}music/{{song.pic_link}}',
+    lyric: tmpl,
+  },
+  {
+    name: '泡沫',
+    url: '{{ MEDIA_URL }}music/邓紫棋/泡沫/泡沫.mp3',
+  }
+  ]);
+      player.play(0);
+</script>
+
 {% endblock %}  

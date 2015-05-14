@@ -4,6 +4,7 @@ from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect, HttpResponse
 from django.template.context import RequestContext
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_exempt
 from models import Song
 from models import UserSong
 from models import Singer
@@ -15,7 +16,7 @@ from datetime import date
 
 from pages_assistant import Page_Assistant
 # Create your views here.
-
+import os
 @login_required
 def song_lib(request):
 	if request.method == 'GET':
@@ -61,11 +62,17 @@ def play(request):
 
 		head = UserMessage.objects.get(user=request.user).head
 
-		print song.pic_link
+		f = open(os.getcwd() + '/media/music/' + song.lrc_link)
+		print os.getcwd() + '/media/music/' + song.lrc_link
+		songLyric = f.read()
+		f.close()
+		#print songLyric
 		return render_to_response(
 			'play.html', 
-			RequestContext(request, {	'song': song,
+			RequestContext(request, {	'user': request.user,
+										'song': song,
 										'head': head,
+										'songLyric': songLyric,
 										'comments': comments,
 										'comments_count': count,
 										'page_nums': page_nums,
@@ -176,6 +183,7 @@ def search_song(request):
 										'cur_page': cur_page,
 										'nex_page': nex_page}))
 
+@csrf_exempt
 @login_required
 def comment(request):
 	if request.method == 'POST':
@@ -185,13 +193,14 @@ def comment(request):
 		except KeyError:
 			print "wrong song id"
 
+		print request.POST['song_id']
+		print request.POST['comment']
 		songcomment.song = Song.objects.get(pk=song_id)
 		songcomment.user = request.user
 		songcomment.comment = request.POST.get('comment', '')
 		songcomment.time = date.today()
 		songcomment.favour = 0
 		songcomment.save()
-
 		return HttpResponseRedirect('/mymusic/play?id=%s' %song_id)
 
 @login_required
@@ -204,6 +213,7 @@ def favour_comment(request):
 		songcomment = SongComment.objects.get(id=comment_id)
 		try:
 			favcomment = FavComment.objects.get(songcomment_id=comment_id,user=request.user)
+			print "已经点过赞了"
 		except  FavComment.DoesNotExist:
 			songcomment.favour+=1
 			songcomment.save()
@@ -211,10 +221,10 @@ def favour_comment(request):
 			favcomment.songcomment=songcomment
 			favcomment.user=request.user
 			favcomment.save()
+			print "成功点赞"
 		else:
 			pass	
-		print  songcomment.song.id
-		print  songcomment.song_id
+		print "song id: %d" %songcomment.song.id
 		return HttpResponseRedirect('/mymusic/play?id=%s' %songcomment.song.id)
 
 @login_required
