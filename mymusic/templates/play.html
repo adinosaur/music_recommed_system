@@ -63,9 +63,13 @@
             <div class="media-body">
               <a herf="">{{comment.user}}</a>:{{comment.comment}}
               <div class="praiseon">
-              {{comment.time.year}}年{{comment.time.month}}月{{comment.time.day}}日
+              {{comment.datetime.year}}年{{comment.datetime.month}}月{{comment.datetime.day}}日 {{comment.datetime.hour}}:{{comment.datetime.minute}}
               
-              <a  calss="praise" onclick="favourComment({{comment.id}})"  href="javascript:void(0);"><span class="glyphicon glyphicon-thumbs-up pull-right" total="{{comment.favour}}" aria-hidden="true">贊({{comment.favour}})</span></a>
+              {% ifequal comment.isFavour 0 %}
+              <a  calss="praise" href="javascript:void(0);"><span class="glyphicon glyphicon-thumbs-up pull-right" id="{{comment.id}}" total="{{comment.favour}}" aria-hidden="true">贊({{comment.favour}})</span></a>
+              {% else %}
+              <a  calss="praise"   href="javascript:void(0);"><span class="glyphicon glyphicon-thumbs-up pull-right" id="{{comment.id}}" total="{{comment.favour}}" aria-hidden="true">取消贊({{comment.favour}})</span></a>
+              {% endifequal %}
               </div>
             </div>
         </li>
@@ -103,7 +107,7 @@
               '</div>' +
             '</div>'
         commentList.appendChild(commentBox);
-        location.reload();
+        //location.reload();
     }
 
     function createxmlhttp(){
@@ -203,7 +207,7 @@
 </script>
 <script type="text/javascript">
 	window.onload= function  () {
-    	var list  = document.getElementById('comment-List');
+    	var list = document.getElementById('comment-List');
     	var lis = list.children;
 
     	function praisetab(el){
@@ -217,10 +221,12 @@
 	    	if(text == ('贊('+oldtotal+')'))
 	    	{	
 	    		newtotal = oldtotal+1;
+          favourComment(el.getAttribute('id'));
 	    		el.innerHTML='取消贊('+newtotal+')';
 	 	}
 	    	else{
 	    		newtotal = oldtotal-1;
+          cancelFavourComment(el.getAttribute('id'));
 	    		el.innerHTML='贊('+newtotal+')';
 	    	}
 	    	el.setAttribute('total',newtotal);
