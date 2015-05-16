@@ -1,3 +1,4 @@
+#coding=utf-8
 """
 Django settings for music_recommed_system project.
 
@@ -37,6 +38,9 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'accounts',
+    'mymusic',
+    'social_music',
+    'captcha',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -85,4 +89,12 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/dev/howto/static-files/
 
+STATIC_ROOT = 'static/'
+
 STATIC_URL = '/static/'
+
+# 媒体文件的根位置
+MEDIA_ROOT = 'media/'
+                
+# 媒体文件的 url 设置，也就是在模板里使用到时候，需要用到这个变量，注意最后面到 ‘/’ 是必须加上的
+MEDIA_URL = '/media/'

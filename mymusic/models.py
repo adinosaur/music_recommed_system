@@ -39,5 +39,4 @@ class FavComment(models.Model):
 	def __unicode__(self):
 		return self.songcomment
 	songcomment = models.ForeignKey(SongComment)
-	user = models.ForeignKey(User)		
-		
+	user = models.ForeignKey(User)			
