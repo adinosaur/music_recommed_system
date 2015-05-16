@@ -62,9 +62,10 @@
             </div>
             <div class="media-body">
               <a herf="">{{comment.user}}</a>:{{comment.comment}}
-              <div>
+              <div class="praiseon">
               {{comment.time.year}}年{{comment.time.month}}月{{comment.time.day}}日
-              <a onclick="favourComment({{comment.id}})" href="javascript:void(0);"><span class="glyphicon glyphicon-thumbs-up pull-right" aria-hidden="true">({{comment.favour}})</span></a>
+              
+              <a  calss="praise" onclick="favourComment({{comment.id}})"  href="javascript:void(0);"><span class="glyphicon glyphicon-thumbs-up pull-right" total="{{comment.favour}}" aria-hidden="true">贊({{comment.favour}})</span></a>
               </div>
             </div>
         </li>
@@ -98,10 +99,11 @@
               '<a herf="">{{user}}</a>:' + comment +
               '<div>' +
               formateDate(new Date()) +
-              '<a href="#"><span class="glyphicon glyphicon-thumbs-up pull-right" aria-hidden="true">(0)</span></a>'+
+              '<a   href="#;"><span class="glyphicon glyphicon-thumbs-up pull-right" total="{{comment.favour}}" aria-hidden="true">贊(0)</span></a>'+
               '</div>' +
             '</div>'
         commentList.appendChild(commentBox);
+        location.reload();
     }
 
     function createxmlhttp(){
@@ -157,6 +159,8 @@
         //reply(comment);
         return false;
     }
+    
+
 </script>
 <script src= "{{ STATIC_URL }}h5player/dist/player-with-css.min.js"></script>          
 <script>
@@ -191,6 +195,48 @@
   }
   ]);
       player.play(0);
+</script>
+<script type="text/javascript">
+	window.onload= function  () {
+    	var list  = document.getElementById('comment-List');
+    	var lis = list.children;
+
+    	function praisetab(el){
+    		var oldtotal = parseInt(el.getAttribute('total'));
+    		var text =el.innerHTML;
+    		var newtotal;
+    		/*if(text=="贊")
+    			el.innerHTML="取消贊";
+    		else
+    			el.innerHTML="贊";*/
+	    	if(text == ('贊('+oldtotal+')'))
+	    	{	
+	    		newtotal = oldtotal+1;
+	    		el.innerHTML='取消贊('+newtotal+')';
+	 	}
+	    	else{
+	    		newtotal = oldtotal-1;
+	    		el.innerHTML='贊('+newtotal+')';
+	    	}
+	    	el.setAttribute('total',newtotal);
+    	}
+
+
+    	for(var i=0; i<lis.length;i++){
+    		lis[i].onclick = function (e)
+    		{
+    			var el =e.srcElement;
+    			//document.write(el.className);
+    			switch(el.className)
+    			{
+    				case 'glyphicon glyphicon-thumbs-up pull-right':
+    				    praisetab(el);
+    				    break;
+    			}
+
+    		}
+    	}
+    }
 </script>
 
 {% endblock %}  
