@@ -157,6 +157,16 @@
         //reply(comment);
         return false;
     }
+
+    function cancelFavourComment(commentID){ 
+        createxmlhttp();
+        url = "/mymusic/cancel-favour-comment";
+        url = addURLParam(url, "id", commentID);
+        xmlhttp.open("get", url, true);
+        xmlhttp.send();
+        //reply(comment);
+        return false;
+    }
 </script>
 <script src= "{{ STATIC_URL }}h5player/dist/player-with-css.min.js"></script>          
 <script>
@@ -184,10 +194,6 @@
     artist: '{{ song.singer }}',
     image: '{{ MEDIA_URL }}music/{{song.pic_link}}',
     lyric: tmpl,
-  },
-  {
-    name: '泡沫',
-    url: '{{ MEDIA_URL }}music/邓紫棋/泡沫/泡沫.mp3',
   }
   ]);
       player.play(0);
