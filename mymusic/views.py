@@ -198,14 +198,15 @@ def comment(request):
 		try:
 			song_id = request.POST['song_id']
 		except KeyError:
-			print "wrong song id"
+			print "[INFO]mymusic.views.comment: wrong song id!"
 
-		print request.POST['song_id']
-		print request.POST['comment']
+		print "[INFO]mymusic.views.comment: song_id=%s" %request.POST['song_id']
+		print "[INFO]mymusic.views.comment: comment=%s" %request.POST['comment']
 		songcomment.song = Song.objects.get(pk=song_id)
 		songcomment.user = request.user
 		songcomment.comment = request.POST.get('comment', '')
 		songcomment.datetime = datetime.now()
+		print "[INFO]mymusic.views.comment: datetime=",
 		print songcomment.datetime
 		songcomment.favour = 0
 		songcomment.save()

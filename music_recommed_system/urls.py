@@ -9,7 +9,7 @@ urlpatterns = [
     url(r'^$', 'accounts.views.login'),
     url(r'^accounts/', include('accounts.urls')),
     url(r'^mymusic/', include('mymusic.urls')),
-    url(r'^social_music/', include('social_music.urls')),
+    url(r'^social-music/', include('social_music.urls')),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^media/(?P<path>.*)$', 'django.views.static.serve',{'document_root': 'media/'}),
     url( r'^static/(?P<path>.*)$', 'django.views.static.serve',{'document_root': 'static/' }),

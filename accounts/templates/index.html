@@ -31,7 +31,7 @@ class="active"
 				{% ifequal page_num cur_page %}
 				<li class="active"><a href="/accounts/index/?p={{page_num}}">{{ page_num }}</a></li>
 				{% else %}
-				<li><a href="/accounts/index/?p={{page_num}}">{{ page_num }}</a></li	>
+				<li><a href="/accounts/index/?p={{page_num}}">{{ page_num }}</a></li>
 				{% endifequal %}
 			{% endfor %}
 			<li><a href="/accounts/index/?p={{nex_page}}"><span aria-hidden="true">&raquo;</span><span class="sr-only">Next</span></a>

@@ -6,8 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="icon" href="../../favicon.ico">
-    
     <!-- Bootstrap core CSS -->
     <link href="http://cdn.bootcss.com/bootstrap/3.3.4/css/bootstrap.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="http://cdn.bootcss.com/bootstrap/3.3.4/css/bootstrap.css.map">
@@ -40,6 +38,9 @@
             <ul class="nav navbar-nav">
               <li {% block mine %}{% endblock %}><a href="/mymusic/song-lib/">我的音乐</a></li>
             </ul>
+            <ul class="nav navbar-nav">
+              <li {% block share %}{% endblock %}><a href="/social-music/share/">分享音乐</a></li>
+            </ul>
             <form action="/mymusic/search-song" method="GET" class="navbar-form navbar-left" role="search">
               <div class="form-group">                
                 <input type="text" name="key" class="form-control" placeholder="搜索音乐，歌手">
@@ -47,7 +48,7 @@
                 </div>
             </form>
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="/accounts/home/">我的主页</a></li>
+                <li><a href="/accounts/home?id={{user.id}}">我的主页</a></li>
                 <li class="pull-right"><a href="/accounts/logout/">退出</a></li>
             </ul>
         </div><!--/.nav-collapse -->

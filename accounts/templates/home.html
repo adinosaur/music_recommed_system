@@ -17,7 +17,10 @@ class="active"
     		</a>
   		</div>
   		<div class="page-header">
-  			<h3>{{user}}</h3>
+  			<h3>{{theuser}}</h3>
+        {% ifnotequal user theuser %}
+        <a class="btn btn-primary" onclick="follow({{theuser.id}})" href="javascript:;" role="button"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>关注</a>
+        {% endifnotequal %}
 		</div>
 			个人介绍:{{intro}}
 	</div>
@@ -26,4 +29,27 @@ class="active"
 
   </div>
 </div>
+<script type="text/javascript">
+  var xmlhttp;
+  function createxmlhttp(){
+
+      if (window.XMLHttpRequest)
+      {// code for IE7+, Firefox, Chrome, Opera, Safari
+        xmlhttp=new XMLHttpRequest();
+      }
+      else
+      {// code for IE6, IE5
+        xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+      }
+
+    }
+  function follow(uid){ 
+        createxmlhttp();
+        url = "/social-music/follow/";
+        xmlhttp.open("post", url, true);
+        xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+        xmlhttp.send("uid=" + uid);
+        return false;
+    }
+</script>
 {% endblock %}  

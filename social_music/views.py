@@ -3,26 +3,35 @@ from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect, HttpResponse
 from django.template.context import RequestContext
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.models import User 
 from models import Attention
 from models import SharedMusic
 # Create your views here.
-
+@csrf_exempt
 @login_required
-def attention(request):
+def follow(request):
 	if request.method == 'POST':
-		attendedUser = request.POST['attendedUser']
+		
+		uid = request.POST['uid']
+		print "[INFO]social-music.views.follow: uid=%s" %(uid)
+		attendedUser = User.objects.get(pk=uid)
 		try:
-			Attention.objects.get(user=request.user, attendedUser=attendedUser).count()
+			Attention.objects.get(user=request.user, attendedUser=attendedUser)
 		except Attention.DoesNotExist:
 			attention = Attention()
 			attention.user = request.user
 			attention.attendedUser = attendedUser
 			attention.save()
-			return HttpResponse("attending success!")
+			print "[INFO]social-music.views.follow: <%s> following <%s> success." %(request.user, attendedUser)
+			return HttpResponse("following success!")
 		else:
-			return HttpResponse("attending failed!")
+			print "[ERROR]social-music.views.follow: <%s> following <%s> failure." %(request.user, attendedUser)
+			return HttpResponse("following failure!")
 
 @login_required
 def share(request):
 	if request.method == 'GET':
-		return HttpResponse("share request")
+		return render_to_response(
+			'share.html', 
+			RequestContext(request, {}))

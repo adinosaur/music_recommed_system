@@ -123,13 +123,17 @@ def index(request):
 
 @login_required
 def home(request):
-    try:
-        usermessage = UserMessage.objects.get(user=request.user)
-    except UserMessage.DoesNotExist:
-        print "内部错误,不存在的UserMessage"
+    if request.method == 'GET':
+        id = request.GET['id']
+        user = User.objects.get(pk=id)
+        print "[INFO]accounts.views.home: (uid=%s, uname=%s)" %(id, user)
+        try:
+            usermessage = UserMessage.objects.get(user=user)
+        except UserMessage.DoesNotExist:
+            print "内部错误,不存在的UserMessage"
 
-    return render_to_response(
-            'home.html', 
-            RequestContext(request, {   'user': request.user,
-                                        'head': usermessage.head,
-                                        'intro': usermessage.intro})) 
+        return render_to_response(
+                'home.html', 
+                RequestContext(request, {   'theuser': user,
+                                            'head': usermessage.head,
+                                            'intro': usermessage.intro}))
