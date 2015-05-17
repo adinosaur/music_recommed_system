@@ -41,7 +41,7 @@
               {% csrf_token %}
                 <table>
                   <textarea class="form-control"  rows="4" id="comment"></textarea>
-                  <input onclick="send_comment()" class="btn btn-primary pull-right" type="button" value="提交">
+                  <input onclick="send_comment(),load()" class="btn btn-primary pull-right" type="button" value="提交">
                   <input id="song_id" value="{{song.pk}}" style="display:none">
                 </table>
               </form>
@@ -52,6 +52,7 @@
       <div class="page-header">
           <h3>最近评论</h3>
         </div>
+        <body onload="load()">
       <ul class="media-list" id="comment-List">
         {% for comment in comments%}
           <li class="media">
@@ -75,6 +76,7 @@
         </li>
         {% endfor %}
       </ul>
+      </body>
   </div>
 </div>
 <script type="text/javascript">
@@ -103,7 +105,7 @@
               '<a herf="">{{user}}</a>:' + comment +
               '<div>' +
               formateDate(new Date()) +
-              '<a   href="#;"><span class="glyphicon glyphicon-thumbs-up pull-right" total="{{comment.favour}}" aria-hidden="true">贊(0)</span></a>'+
+              '<a  calss="praise"   href="javascript:void(0);"><span class="glyphicon glyphicon-thumbs-up pull-right" id="{{comment.id}}" total="0" aria-hidden="true">贊(0)</span></a>'+
               '</div>' +
             '</div>'
         commentList.appendChild(commentBox);
@@ -206,11 +208,7 @@
       player.play(0);
 </script>
 <script type="text/javascript">
-	window.onload= function  () {
-    	var list = document.getElementById('comment-List');
-    	var lis = list.children;
-
-    	function praisetab(el){
+function praisetab(el){
     		var oldtotal = parseInt(el.getAttribute('total'));
     		var text =el.innerHTML;
     		var newtotal;
@@ -221,18 +219,19 @@
 	    	if(text == ('贊('+oldtotal+')'))
 	    	{	
 	    		newtotal = oldtotal+1;
-          favourComment(el.getAttribute('id'));
+          			favourComment(el.getAttribute('id'));
 	    		el.innerHTML='取消贊('+newtotal+')';
 	 	}
 	    	else{
 	    		newtotal = oldtotal-1;
-          cancelFavourComment(el.getAttribute('id'));
+			cancelFavourComment(el.getAttribute('id'));
 	    		el.innerHTML='贊('+newtotal+')';
 	    	}
 	    	el.setAttribute('total',newtotal);
     	}
-
-
+function  load() {
+    	var list = document.getElementById('comment-List');
+    	var lis = list.children;
     	for(var i=0; i<lis.length;i++){
     		lis[i].onclick = function (e)
     		{
