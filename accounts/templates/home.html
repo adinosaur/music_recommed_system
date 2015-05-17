@@ -8,6 +8,7 @@ class="active"
 
 
 {% block content %} 
+<script src= "{{ STATIC_URL }}js/xmlhttp.js"></script>
 <div class="row">
   <div class="col-xs-12 col-md-8">
   	<div class="row">
@@ -33,54 +34,4 @@ class="active"
 
   </div>
 </div>
-<script type="text/javascript">
-  var xmlhttp;
-  function createxmlhttp(){
-
-      if (window.XMLHttpRequest)
-      {// code for IE7+, Firefox, Chrome, Opera, Safari
-        xmlhttp=new XMLHttpRequest();
-      }
-      else
-      {// code for IE6, IE5
-        xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-      }
-
-    }
-  function follow(uid){ 
-        createxmlhttp();
-        url = "/social-music/follow/";
-        xmlhttp.open("post", url, true);
-        xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
-        xmlhttp.send("uid=" + uid);
-        return false;
-    }
-  function unfollow(uid){ 
-        createxmlhttp();
-        url = "/social-music/unfollow/";
-        xmlhttp.open("post", url, true);
-        xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
-        xmlhttp.send("uid=" + uid);
-        return false;
-    }
-
-
-  function isFollowTab(el){
-        var oldtotal = parseInt(el.getAttribute('total'));
-        var text =el.innerHTML;
-        var newtotal;
-        if(text == ('贊('+oldtotal+')'))
-        { 
-          newtotal = oldtotal+1;
-          favourComment(el.getAttribute('id'));
-          el.innerHTML='取消贊('+newtotal+')';
-        }
-        else{
-          newtotal = oldtotal-1;
-          cancelFavourComment(el.getAttribute('id'));
-          el.innerHTML='贊('+newtotal+')';
-        }
-        el.setAttribute('total',newtotal);
-  }
-</script>
 {% endblock %}  

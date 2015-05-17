@@ -9,6 +9,10 @@
 
 
 {% block content %}
+<script src= "{{ STATIC_URL }}js/comment.js"></script>
+<script src= "{{ STATIC_URL }}js/xmlhttp.js"></script>
+<script src= "{{ STATIC_URL }}js/favour.js"></script>
+<script src= "{{ STATIC_URL }}h5player/dist/player-with-css.min.js"></script> 
 <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css"> 
 <div class="row">
   <div class="col-xs-12 col-md-8">
@@ -80,18 +84,6 @@
   </div>
 </div>
 <script type="text/javascript">
-    var xmlhttp;
-
-    function formateDate(date) {
-        var y = date.getFullYear();
-        var m = date.getMonth() + 1;
-        var d = date.getDate();
-        var h = date.getHours();
-        var mi = date.getMinutes();
-        m = m > 9 ? m : '0' + m;
-        return y + '日' + m + '月' + d + '日 ' + h + ':' + mi;
-    }
-
     function reply(comment) {
         var commentList = document.getElementById('comment-List');  
         var commentBox = document.createElement('li');
@@ -109,75 +101,8 @@
               '</div>' +
             '</div>'
         commentList.appendChild(commentBox);
-        //location.reload();
     }
-
-    function createxmlhttp(){
-
-      if (window.XMLHttpRequest)
-      {// code for IE7+, Firefox, Chrome, Opera, Safari
-        xmlhttp=new XMLHttpRequest();
-      }
-      else
-      {// code for IE6, IE5
-        xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-      }
-
-    }
-
-    function addURLParam(url, name, value){
-      url += (url.indexOf("?") == -1 ? "?" : "&")
-      url += encodeURIComponent(name) + "=" + encodeURIComponent(value);
-      return url;
-    }
-    
-    function send_playmusic_request(value){
-      createxmlhttp();
-      url = "/mymusic/playmusic";
-      url = addURLParam(url, "id", value);
-      xmlhttp.open("get", url, true);
-      xmlhttp.send();
-    }
-
-    function send_comment(){ 
-      var comment=document.getElementById("comment").value;
-      if (comment != ""){
-        createxmlhttp();
-        url = "/mymusic/comment";
-        xmlhttp.open("post", url, true);
-        xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
-
-        var songId = document.getElementById("song_id").value;
-        var queryString = "comment=" + comment +"&song_id=" + songId;
-        xmlhttp.send(queryString);
-        //alert(queryString);
-        reply(comment);
-        return false;
-      }
-    }
-
-    function favourComment(commentID){ 
-        createxmlhttp();
-        url = "/mymusic/favour-comment";
-        url = addURLParam(url, "id", commentID);
-        xmlhttp.open("get", url, true);
-        xmlhttp.send();
-        //reply(comment);
-        return false;
-    }
-
-    function cancelFavourComment(commentID){ 
-        createxmlhttp();
-        url = "/mymusic/cancel-favour-comment";
-        url = addURLParam(url, "id", commentID);
-        xmlhttp.open("get", url, true);
-        xmlhttp.send();
-        //reply(comment);
-        return false;
-    }
-
-</script>
-<script src= "{{ STATIC_URL }}h5player/dist/player-with-css.min.js"></script>          
+</script>         
 <script>
   function heredoc(fn) {
     return fn.toString().split('\n').slice(1,-1).join('\n') + '\n'
@@ -207,46 +132,4 @@
   ]);
       player.play(0);
 </script>
-<script type="text/javascript">
-function praisetab(el){
-    		var oldtotal = parseInt(el.getAttribute('total'));
-    		var text =el.innerHTML;
-    		var newtotal;
-    		/*if(text=="贊")
-    			el.innerHTML="取消贊";
-    		else
-    			el.innerHTML="贊";*/
-	    	if(text == ('贊('+oldtotal+')'))
-	    	{	
-	    		newtotal = oldtotal+1;
-          			favourComment(el.getAttribute('id'));
-	    		el.innerHTML='取消贊('+newtotal+')';
-	 	    }
-	    	else{
-	    		newtotal = oldtotal-1;
-			cancelFavourComment(el.getAttribute('id'));
-	    		el.innerHTML='贊('+newtotal+')';
-	    	}
-	    	el.setAttribute('total',newtotal);
-    	}
-function  load() {
-    	var list = document.getElementById('comment-List');
-    	var lis = list.children;
-    	for(var i=0; i<lis.length;i++){
-    		lis[i].onclick = function (e)
-    		{
-    			var el =e.srcElement;
-    			//document.write(el.className);
-    			switch(el.className)
-    			{
-    				case 'glyphicon glyphicon-thumbs-up pull-right':
-    				    praisetab(el);
-    				    break;
-    			}
-
-    		}
-    	}
-    }
-</script>
-
-{% endblock %}  
+{% endblock %}

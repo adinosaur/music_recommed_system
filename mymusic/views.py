@@ -197,8 +197,9 @@ def comment(request):
 		songcomment = SongComment()
 		try:
 			song_id = request.POST['song_id']
-		except KeyError:
+		except KeyError, e:
 			print "[INFO]mymusic.views.comment: wrong song id!"
+			print e
 
 		print "[INFO]mymusic.views.comment: song_id=%s" %request.POST['song_id']
 		print "[INFO]mymusic.views.comment: comment=%s" %request.POST['comment']
@@ -218,11 +219,11 @@ def favour_comment(request):
 		try:
 			comment_id = request.GET['id']
 		except KeyError:
-			print "worng comment id"
+			print "[ERROR]mymusic.views.favour_comment: worng comment id"
 		songcomment = SongComment.objects.get(id=comment_id)
 		try:
 			favcomment = FavComment.objects.get(songcomment_id=comment_id,user=request.user)
-			print "已经点过赞了"
+			print "[ERROR]mymusic.views.favour_comment: 已经点过赞了, song id: %d" %songcomment.song.id
 		except  FavComment.DoesNotExist:
 			songcomment.favour+=1
 			songcomment.save()
@@ -230,10 +231,9 @@ def favour_comment(request):
 			favcomment.songcomment=songcomment
 			favcomment.user=request.user
 			favcomment.save()
-			print "成功点赞"
+			print "[INFO]mymusic.views.favour_comment: 成功点赞, song id: %d" %songcomment.song.id
 		else:
-			pass	
-		print "song id: %d" %songcomment.song.id
+			pass
 		return HttpResponseRedirect('/mymusic/play?id=%s' %songcomment.song.id)
 
 @login_required
@@ -242,20 +242,12 @@ def cancel_favour_comment(request):
 		try:
 			comment_id = request.GET['id']
 		except KeyError:
-			print "worng comment id"
-
-		
+			print "[ERROR]mymusic.views.cancel_favour_comment: worng comment id"
 		print "comment_id: " + comment_id
 		songcomment = SongComment.objects.get(id=comment_id)
-		print "old songcomment.favour: %d" %songcomment.favour
 		songcomment.favour -= 1
-		print "new songcomment.favour: %d" %songcomment.favour
 		songcomment.save()
 		favcomment = FavComment.objects.get(user=request.user, songcomment=songcomment)
-		print favcomment
 		favcomment.delete()
-		print songcomment
-		print "成功取消赞"
-		print "song id: %d" %songcomment.song.id
-
+		print "[INFO]mymusic.views.cancel_favour_comment: 成功取消赞, song id: %d" %songcomment.song.id
 		return HttpResponseRedirect('/mymusic/play?id=%s' %songcomment.song.id)
