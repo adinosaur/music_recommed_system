@@ -19,7 +19,11 @@ class="active"
   		<div class="page-header">
   			<h3>{{theuser}}</h3>
         {% ifnotequal user theuser %}
-        <a class="btn btn-primary" onclick="follow({{theuser.id}})" href="javascript:;" role="button"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>关注</a>
+          {% ifequal isFollow False %}
+          <a class="btn btn-primary" onclick="follow({{theuser.id}})" href="javascript:;" role="button"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>关注</a>
+          {% else %}
+          <a class="btn btn-primary" onclick="unfollow({{theuser.id}})" href="javascript:;" role="button"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>取消关注</a>
+          {% endifequal %}
         {% endifnotequal %}
 		</div>
 			个人介绍:{{intro}}
@@ -51,5 +55,32 @@ class="active"
         xmlhttp.send("uid=" + uid);
         return false;
     }
+  function unfollow(uid){ 
+        createxmlhttp();
+        url = "/social-music/unfollow/";
+        xmlhttp.open("post", url, true);
+        xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+        xmlhttp.send("uid=" + uid);
+        return false;
+    }
+
+
+  function isFollowTab(el){
+        var oldtotal = parseInt(el.getAttribute('total'));
+        var text =el.innerHTML;
+        var newtotal;
+        if(text == ('贊('+oldtotal+')'))
+        { 
+          newtotal = oldtotal+1;
+          favourComment(el.getAttribute('id'));
+          el.innerHTML='取消贊('+newtotal+')';
+        }
+        else{
+          newtotal = oldtotal-1;
+          cancelFavourComment(el.getAttribute('id'));
+          el.innerHTML='贊('+newtotal+')';
+        }
+        el.setAttribute('total',newtotal);
+  }
 </script>
 {% endblock %}  

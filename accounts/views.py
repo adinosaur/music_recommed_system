@@ -12,6 +12,7 @@ from mymusic.models import Song
 from mymusic.models import Singer
 from mymusic.pages_assistant import Page_Assistant
 from models import UserMessage
+from social_music.models import Attention
 
 @csrf_exempt
 def register(request):
@@ -130,10 +131,17 @@ def home(request):
         try:
             usermessage = UserMessage.objects.get(user=user)
         except UserMessage.DoesNotExist:
-            print "内部错误,不存在的UserMessage"
+            print "[ERROE]accounts.views.home: 内部错误,不存在的UserMessage"
+
+        try:
+            Attention.objects.get(user=request.user, attendedUser=user)
+            isFollow = True
+        except Attention.DoesNotExist:
+            isFollow = False
 
         return render_to_response(
                 'home.html', 
-                RequestContext(request, {   'theuser': user,
+                RequestContext(request, {   'isFollow': isFollow,
+                                            'theuser': user,
                                             'head': usermessage.head,
                                             'intro': usermessage.intro}))

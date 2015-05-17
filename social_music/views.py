@@ -29,6 +29,23 @@ def follow(request):
 			print "[ERROR]social-music.views.follow: <%s> following <%s> failure." %(request.user, attendedUser)
 			return HttpResponse("following failure!")
 
+@csrf_exempt
+@login_required
+def unfollow(request):
+	if request.method == 'POST':
+		
+		uid = request.POST['uid']
+		print "[INFO]social-music.views.unfollow: uid=%s" %(uid)
+		attendedUser = User.objects.get(pk=uid)
+		try:
+			attention = Attention.objects.get(user=request.user, attendedUser=attendedUser)
+			attention.delete()
+			print "[INFO]social-music.views.unfollow: <%s> unfollow <%s> success." %(request.user, attendedUser)
+			return HttpResponse("unfollow success!")
+		except Attention.DoesNotExist:
+			print "[ERROR]social-music.views.unfollow: <%s> unfollow <%s> failure." %(request.user, attendedUser)
+			return HttpResponse("unfollowi failure!")
+
 @login_required
 def share(request):
 	if request.method == 'GET':
