@@ -14,8 +14,8 @@ class="active"
   	<div class="row">
   		<div class="col-xs-6 col-md-3">
     		<a href="#" class="thumbnail">
-     	 		<img src="{{ MEDIA_URL }}heads/{{head}}_large" alt="...">
-    		</a>
+          <img src="{{ MEDIA_URL }}heads/{{head}}_large" alt="...">
+        </a>  
   		</div>
   		<div class="page-header">
   			<h3>{{theuser}}</h3>
@@ -26,9 +26,9 @@ class="active"
           <a class="btn btn-primary" onclick="unfollow({{theuser.id}})" href="javascript:;" role="button"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>取消关注</a>
           {% endifequal %}
         {% endifnotequal %}
-		</div>
-			个人介绍:{{intro}}
-	</div>
+		  </div>
+			 个人介绍:{{intro}}
+	 </div>
   </div>
   <div class="col-xs-6 col-md-4">
 
