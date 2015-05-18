@@ -1,10 +1,12 @@
+#coding=utf8
 from django.shortcuts import render
 from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect, HttpResponse
 from django.template.context import RequestContext
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
-from django.contrib.auth.models import User 
+from django.contrib.auth.models import User
+from accounts.models import UserMessage 
 from models import Attention
 from models import SharedMusic
 # Create your views here.
@@ -49,6 +51,10 @@ def unfollow(request):
 @login_required
 def share(request):
 	if request.method == 'GET':
+		try:
+			usermessage = UserMessage.objects.get(user=request.user)
+		except UserMessage.DoesNotExist:
+			print "[ERROE]social-music.views.share: 内部错误,不存在的UserMessage"
 		return render_to_response(
 			'share.html', 
-			RequestContext(request, {}))
+			RequestContext(request, {	'head': usermessage.head,}))
