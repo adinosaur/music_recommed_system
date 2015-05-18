@@ -34,3 +34,25 @@ function load(){
         }
     }
 }
+
+window.onload = function(){
+    var textArea = document.getElementById('comment');
+    var tj_button = document.getElementById('button')
+    var word = document.getElementById('word');
+    textArea.onkeyup=function(){
+        var val = this.value;
+        var len = val.length;
+        if(len<=0||len>140){
+            tj_button.disabled='disabled';
+        }
+        else
+            tj_button.disabled='';
+        word.innerHTML=len + '/140';
+    }
+    tj_button.onclick = function(){
+            send_comment();
+            load();
+            textArea.value='';
+            word.innerHTML='0/140';
+    }
+}

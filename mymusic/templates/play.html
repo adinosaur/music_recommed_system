@@ -44,9 +44,10 @@
               <form id="comment-form">
               {% csrf_token %}
                 <table>
-                  <textarea class="form-control"  rows="4" id="comment"></textarea>
-                  <input onclick="send_comment(),load()" class="btn btn-primary pull-right" type="button" value="提交">
+                  <textarea class="form-control" rows="4" id="comment"></textarea>
+                  <input  class="btn btn-primary pull-right" id="button" disabled="disabled" type="button" value="提交">
                   <input id="song_id" value="{{song.pk}}" style="display:none">
+                  <span class="word pull-right" id='word'>0/140</span>
                 </table>
               </form>
           </div>
