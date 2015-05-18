@@ -187,5 +187,19 @@
     	}
     }
 </script>
-
+<h4>{{song.title}}</h4>
+          <div class="media-body">
+              <form id="share-form" method="POST" action="">
+              {% csrf_token %}
+                <table>
+                  <textarea class="form-control"  rows="4" name="comment"></textarea>
+                  <input  class="btn btn-primary pull-right" type="submit" value="提交">
+                  <input id="song_id" value="{{song.pk}}" style="display:none">
+                </table>
+              </form>
+          </div>
+          {% for sharedmusic in sharedmusics%}
+          <h4>{{sharedmusic.user}}&nbsp;&nbsp;{{sharedmusic.song.title}}&nbsp;&nbsp;{{sharedmusic.comment}}&nbsp;&nbsp;
+          {{sharedmusic.datetime}}</h4>
+          {% endfor%}
 {% endblock %}  

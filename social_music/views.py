@@ -7,6 +7,8 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.models import User 
 from models import Attention
 from models import SharedMusic
+from mymusic.models import Song
+import datetime
 # Create your views here.
 @csrf_exempt
 @login_required
@@ -49,6 +51,44 @@ def unfollow(request):
 @login_required
 def share(request):
 	if request.method == 'GET':
+		attentions = Attention.objects.filter(user = request.user)
+		sharedmusics = []
+		for attention in attentions:
+			try:
+				sharedmusic = SharedMusic.objects.filter(user= attention.attendedUser)
+				for everymusic in sharedmusic:
+					sharedmusics.append(everymusic)
+			except SharedMusic.DoesNotExist:
+				print "no sharedmusics data"		
+		try:
+			songid = request.GET['id']
+			song = Song.objects.get(id = songid)
+		except Exception,e:
+			return render_to_response(
+			'share.html', 
+			RequestContext(request, {'sharedmusics':sharedmusics}))
 		return render_to_response(
 			'share.html', 
-			RequestContext(request, {}))
+			RequestContext(request, {'song': song,'sharedmusics':sharedmusics}))
+	if request.method == 'POST':
+		comment = request.POST['comment']
+		songid = request.GET['id']
+		song = Song.objects.get(id = songid)
+		sharedmusic = SharedMusic()
+		sharedmusic.user = request.user
+		sharedmusic.comment = comment
+		sharedmusic.song = song
+		sharedmusic.datetime = datetime.datetime.now()
+		sharedmusic.save()
+		attentions = Attention.objects.filter(user = request.user)
+		sharedmusics = []
+		for attention in attentions:
+			try:
+				sharedmusic = SharedMusic.objects.filter(user= attention.attendedUser)
+				for everymusic in sharedmusic:
+					sharedmusics.append(everymusic)
+			except SharedMusic.DoesNotExist:
+				print "no sharedmusics"	
+		return  render_to_response(
+			'share.html',
+			RequestContext(request,{'song': song,'sharedmusics':sharedmusics}))

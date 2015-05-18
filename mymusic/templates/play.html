@@ -26,6 +26,8 @@
             <h3>{{song.singer}}</h3>
             <h4><a onclick="send_playmusic_request({{song.pk}})" href="/mymusic/play?id={{song.pk}}"><span class="glyphicon glyphicon-play-circle" aria-hidden="true">立即播放</span></a></h4>
             <h4><a href="/mymusic/favour?id={{song.pk}}"><span class="glyphicon glyphicon-heart" aria-hidden="true">收藏</span></a></h4>
+            <h4><a href="/social-music/share/?id={{song.id}}"><span class="glyphicon glyphicon-heart" arai-hidden="true">分享</span></a>
+            </h4>
           </div>
           <link rel="stylesheet" href="http://cdn.bootcss.com/font-awesome/4.3.0/css/font-awesome.css">
         </div>
