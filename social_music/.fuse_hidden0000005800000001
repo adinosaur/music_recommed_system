@@ -1,12 +1,10 @@
-#coding=utf8
 from django.shortcuts import render
 from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect, HttpResponse
 from django.template.context import RequestContext
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
-from django.contrib.auth.models import User
-from accounts.models import UserMessage 
+from django.contrib.auth.models import User 
 from models import Attention
 from models import SharedMusic
 from mymusic.models import Song
