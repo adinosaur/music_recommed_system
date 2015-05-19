@@ -47,9 +47,10 @@
                     </ul>
                     <form id="comment-form" action="/social-music/share/" method="post">
                     {% csrf_token %}
-                      <textarea class="form-control" rows="4" name="share_comment">说点什么吧</textarea>
+                      <textarea class="form-control" rows="4" id="share_comment" name="share_comment">说点什么吧</textarea>
                       <input name="song_id" value="{{song.pk}}" style="display:none">
                       <input type="submit" class="btn btn-primary pull-right" value="分享">
+                      <input type="submit" class="btn btn-primary pull-right" id="share_button" value="分享">
                       <span class="word pull-right" id='share_word'>0/140</span>
                     </form>
                   </div>
@@ -77,7 +78,7 @@
               {% csrf_token %}
                 <table>
                   <textarea class="form-control" rows="4" id="comment"></textarea>
-                  <input  class="btn btn-primary pull-right" id="button" disabled="disabled" type="button" value="提交">
+                  <input class="btn btn-primary pull-right" id="button" disabled="disabled" type="button" value="提交">
                   <input id="song_id" value="{{song.pk}}" style="display:none">
                   <span class="word pull-right" id='word'>0/140</span>
                 </table>

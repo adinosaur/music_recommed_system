@@ -8,10 +8,12 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.models import User
 from accounts.models import UserMessage 
 from django.db.models import Q
+from mymusic.models import Song
 from models import Attention
 from models import SharedMusic
-from mymusic.models import Song
-import datetime
+from models import SharedMusicComment
+from datetime import datetime
+
 # Create your views here.
 @csrf_exempt
 @login_required
@@ -64,16 +66,44 @@ def share(request):
 		sharedmusic.user = request.user
 		sharedmusic.comment = comment
 		sharedmusic.song = song
-		sharedmusic.datetime = datetime.datetime.now()
+		sharedmusic.datetime = datetime.now()
 		sharedmusic.save()
-		
+
 	attentions = Attention.objects.filter(user=request.user)
 	objQ = Q(user=request.user)
 	for attention in attentions:
 		objQ |= Q(user=attention.attendedUser)
 
 	sharedMusics = SharedMusic.objects.filter(objQ).order_by("-datetime")
+	sharedMusicCount = SharedMusic.objects.filter(user=request.user).count()
+	followingCount = len(attentions)
+	followedCount = Attention.objects.filter(attendedUser=request.user).count()
 	return  render_to_response(
 			'share.html',
 			RequestContext(request,{	'sharedMusics':sharedMusics,
-										'head': usermessage.head}))
+										'head': usermessage.head,
+										'sharedMusicCount': sharedMusicCount,
+										'followingCount': followingCount,
+										'followedCount': followedCount}))
+
+@login_required
+def comment(request):
+	if request.method == 'POST':
+		sharedMusicComment = SharedMusicComment()
+		try:
+			sharedMusicID = request.POST['id']
+		except KeyError, e:
+			print "[INFO]social-music.views.comment: wrong sharedMusicID!"
+			print e
+
+		print "[INFO]social-music.views.comment: sharedMusicID=%s" %request.POST['id']
+		print "[INFO]social-music.views.comment: comment=%s" %request.POST['comment']
+
+		sharedMusicComment.song = sharedMusic.objects.get(pk=sharedMusicID)
+		sharedMusicComment.user = request.user
+		sharedMusicComment.comment = request.POST['comment']
+		sharedMusicComment.datetime = datetime.now()
+		sharedMusicComment.favour = 0
+		sharedMusicComment.save()
+
+		return HttpResponseRedirect('/social-music/share/')

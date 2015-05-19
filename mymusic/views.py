@@ -31,9 +31,7 @@ def song_lib(request):
 		b, e = page_assistant.get_objects_by_pageno(cur_page)
 		usersongs = UserSong.objects.filter(user=request.user)[b:e]
 		songs = [usersong.song for usersong in usersongs]
-
 		
-
 		return render_to_response(
 			'favour.html', 
 			RequestContext(request, {	'songs': songs,
