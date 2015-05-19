@@ -30,6 +30,7 @@ function load(){
 
 function reply(comment) {
     var commentList = document.getElementById('comment-List');  
+    var textArea = document.getElementById('comment');
     var commentBox = document.createElement('li');
     commentBox.className = 'media';
     commentBox.innerHTML =

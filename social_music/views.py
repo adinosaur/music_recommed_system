@@ -7,8 +7,11 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.models import User
 from accounts.models import UserMessage 
+from django.db.models import Q
 from models import Attention
 from models import SharedMusic
+from mymusic.models import Song
+import datetime
 # Create your views here.
 @csrf_exempt
 @login_required
@@ -50,11 +53,27 @@ def unfollow(request):
 
 @login_required
 def share(request):
-	if request.method == 'GET':
-		try:
-			usermessage = UserMessage.objects.get(user=request.user)
-		except UserMessage.DoesNotExist:
-			print "[ERROE]social-music.views.share: 内部错误,不存在的UserMessage"
-		return render_to_response(
-			'share.html', 
-			RequestContext(request, {	'head': usermessage.head,}))
+	usermessage = UserMessage.objects.get(user=request.user)
+	if request.method == 'POST':
+		comment = request.POST['share_comment']
+		songid = request.POST['song_id']
+		song = Song.objects.get(id=songid)
+		print "[INFO]social-music.views.share: share(song=%s)" %(song)
+		
+		sharedmusic = SharedMusic()
+		sharedmusic.user = request.user
+		sharedmusic.comment = comment
+		sharedmusic.song = song
+		sharedmusic.datetime = datetime.datetime.now()
+		sharedmusic.save()
+		
+	attentions = Attention.objects.filter(user=request.user)
+	objQ = Q(user=request.user)
+	for attention in attentions:
+		objQ |= Q(user=attention.attendedUser)
+
+	sharedMusics = SharedMusic.objects.filter(objQ).order_by("-datetime")
+	return  render_to_response(
+			'share.html',
+			RequestContext(request,{	'sharedMusics':sharedMusics,
+										'head': usermessage.head}))

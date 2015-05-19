@@ -20,13 +20,45 @@
         <div class="col-xs-6 col-md-6">
           <div id="player"></div>
         </div>
-        <div class="col-xs-6 col-md-2"> 
+        <div class="col-xs-6 col-md-6"> 
           <div id="title">
-            <h2>{{song.title}}</h2>
-            <h3>{{song.singer}}</h3>
-            <h4><a onclick="send_playmusic_request({{song.pk}})" href="/mymusic/play?id={{song.pk}}"><span class="glyphicon glyphicon-play-circle" aria-hidden="true">立即播放</span></a></h4>
-            <h4><a href="/mymusic/favour?id={{song.pk}}"><span class="glyphicon glyphicon-heart" aria-hidden="true">收藏</span></a></h4>
+            <h2><small>歌曲：</small>{{song.title}}</h2>
+            <h4><small>歌手：</small>{{song.singer}}</h4>
+            <a class="btn btn-primary" onclick="send_playmusic_request({{song.pk}})" href="/mymusic/play?id={{song.pk}}"><span class="glyphicon glyphicon-play-circle" aria-hidden="true">立即播放</span></a>
+            <a class="btn btn-default" href="/mymusic/favour?id={{song.pk}}"><span class="glyphicon glyphicon-ok-circle" aria-hidden="true">收藏</span></a>
+            <a class="btn btn-default" data-target="#myModal" data-toggle="modal"><span class="glyphicon glyphicon-share" arai-hidden="true">分享</span></a>
           </div>
+          <!-- href="/social-music/share/?id={{song.id}}" -->
+            <div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" 
+                      data-dismiss="modal" aria-hidden="true">
+                      &times;
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">
+                      分享
+                    </h4>
+                  </div>
+                  <div class="modal-body">
+                    <ul class="nav nav-tabs">
+                        <li role="presentation" class="active"><a href="#">分享给粉丝们</a></li>
+                    </ul>
+                    <form id="comment-form" action="/social-music/share/" method="post">
+                    {% csrf_token %}
+                      <textarea class="form-control" rows="4" name="share_comment">说点什么吧</textarea>
+                      <input name="song_id" value="{{song.pk}}" style="display:none">
+                      <input type="submit" class="btn btn-primary pull-right" value="分享">
+                      <span class="word pull-right" id='word'>0/140</span>
+                    </form>
+                  </div>
+                  <div class="modal-footer">
+
+                  </div>
+                </div><!-- /.modal-content -->
+              </div>
+            </div>
           <link rel="stylesheet" href="http://cdn.bootcss.com/font-awesome/4.3.0/css/font-awesome.css">
         </div>
       </div>
@@ -44,9 +76,10 @@
               <form id="comment-form">
               {% csrf_token %}
                 <table>
-                  <textarea class="form-control"  rows="4" id="comment"></textarea>
-                  <input onclick="send_comment(),load()" class="btn btn-primary pull-right" type="button" value="提交">
+                  <textarea class="form-control" rows="4" id="comment"></textarea>
+                  <input  class="btn btn-primary pull-right" id="button" disabled="disabled" type="button" value="提交">
                   <input id="song_id" value="{{song.pk}}" style="display:none">
+                  <span class="word pull-right" id='word'>0/140</span>
                 </table>
               </form>
           </div>
@@ -73,7 +106,7 @@
               {% ifequal comment.isFavour 0 %}
               <a  calss="praise" href="javascript:void(0);"><span class="glyphicon glyphicon-thumbs-up pull-right" id="{{comment.id}}" total="{{comment.favour}}" aria-hidden="true">贊({{comment.favour}})</span></a>
               {% else %}
-              <a  calss="praise"   href="javascript:void(0);"><span class="glyphicon glyphicon-thumbs-up pull-right" id="{{comment.id}}" total="{{comment.favour}}" aria-hidden="true">取消贊({{comment.favour}})</span></a>
+              <a  calss="praise" href="javascript:void(0);"><span class="glyphicon glyphicon-thumbs-up pull-right" id="{{comment.id}}" total="{{comment.favour}}" aria-hidden="true">取消贊({{comment.favour}})</span></a>
               {% endifequal %}
               </div>
             </div>

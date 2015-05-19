@@ -4,7 +4,6 @@ from mymusic.models import Song
 # Create your models here.
 
 class SharedMusic(models.Model):
-
 	user = 	models.ForeignKey(User)
 	song = models.ForeignKey(Song)
 	comment = models.CharField(max_length=255)
