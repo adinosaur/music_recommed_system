@@ -46,15 +46,15 @@ function send_post_request(url, value){
 
 // mymusic.templates.play.html文件
 function send_playmusic_request(value){
-    url = "/mymusic/playmusic";
+    url="/mymusic/playmusic";
     url = addURLParam(url, "id", value);
     send_get_request(url);
 }
 
 function send_comment(){ 
     var comment = document.getElementById("comment").value;
+    url="/mymusic/comment";
     if (comment != ""){
-        url = "/mymusic/comment";
         var songId = document.getElementById("song_id").value;
         var queryString = "comment=" + comment +"&song_id=" + songId;
         send_post_request(url, queryString);
@@ -63,31 +63,31 @@ function send_comment(){
     }
 }
 
-function favourComment(commentID){ 
-    url = "/mymusic/favour-comment";
+function favourComment(commentID){
+    url="/mymusic/favour-comment"; 
     url = addURLParam(url, "id", commentID);
     send_get_request(url);
     return false;
 }
 
-function cancelFavourComment(commentID){ 
+function cancelFavourComment(commentID){
+    url="/mymusic/cancel-favour-comment" 
     createxmlhttp();
-    url = "/mymusic/cancel-favour-comment";
     url = addURLParam(url, "id", commentID);
     send_get_request(url);
     return false;
 }
 
 // accounts.templates.home.html文件
-function follow(uid){ 
-    url = "/social-music/follow/";
+function follow(uid){
+    url="/social-music/follow/"; 
     value = "uid=" + uid
     send_post_request(url, value);
     return false;
 }
 
 function unfollow(uid){
-    url = "/social-music/unfollow/";
+    url="/social-music/unfollow/";
     value = "uid=" + uid
     send_post_request(url, value);
     return false;

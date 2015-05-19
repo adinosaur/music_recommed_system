@@ -12,3 +12,10 @@ class SharedMusic(models.Model):
 class Attention(models.Model):
 	user = models.ForeignKey(User, related_name='attendingUser')
 	attendedUser = models.ForeignKey(User, related_name='attendedUser')
+
+class SharedMusicComment(models.Model):
+	sharedMusic = models.ForeignKey(SharedMusic)
+	user = models.ForeignKey(User)
+	comment = models.CharField(max_length=255)
+	datetime = models.DateTimeField()
+	favour = models.IntegerField(default=0) 
