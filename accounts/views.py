@@ -18,9 +18,7 @@ from social_music.models import Attention
 def register(request):
     if request.method == 'GET':
         form = RegistForm()
-        return render_to_response("register.html", {
-            'form': form,
-        })
+        return render_to_response("register.html", RequestContext(request, {'form': form}))
     else:         
         form = RegistForm(request.POST)
         register_flag = True

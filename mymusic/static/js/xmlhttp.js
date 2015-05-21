@@ -80,7 +80,7 @@ function cancelFavourComment(commentID){
 
 // accounts.templates.home.html文件
 function follow(uid){
-    url="/social-music/follow/"; 
+    url="/social-music/follow/";
     value = "uid=" + uid
     send_post_request(url, value);
     return false;

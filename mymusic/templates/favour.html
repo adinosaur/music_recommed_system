@@ -11,32 +11,43 @@ class="active"
 {% block content %} 
 <span class="icon-headphones"></span>  
 <ul class="list-group">
-	{% for song in songs %}
-	<div>
-		<div class="panel-body" style="padding: 0">
-			<h1 class="panel-title">
-			<li class="list-group-item">
-				<a href="/mymusic/play?id={{song.pk}}">{{song.title}}</a>
-				<a href="">-{{song.singer}}</a>
-				<a href=""><span class="glyphicon glyphicon-headphones" aria-hidden="true"></span></a>
-				<a href="/mymusic/remove-fav?id={{song.pk}}" class="pull-right"><span class="glyphicon glyphicon-heart" aria-hidden="true"></span></a>
-			</li>
-			</h1>
-		</div>
-	</div>
-	{% endfor %}
+	<table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th>歌曲标题</th>
+                <th>歌手</th>
+                <th>其它</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for song in songs %}
+            <tr>
+                <th><a href="/mymusic/play?id={{song.pk}}" style="color: #34495e">{{song.title}}</a></th>
+                <th><a href="/mymusic/singer?id={{song.singer.id}}" style="color: #34495e">{{song.singer.name}}</a></th>
+                <th><a href=""><span class="glyphicon glyphicon-headphones" aria-hidden="true"></span></a>
+				<a onclick=send_get_request({{song.pk}})"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></a></th>
+            </tr>
+            {% endfor %}
+        <tbody>
+    </table>
 	<nav>
-		<ul class="pagination">
-			<li><a href="/mymusic/song-lib?p={{pre_page}}"><span aria-hidden="true">&laquo;</span><span class="sr-only">Previous</span></a></li>
-			{% for page_num in page_nums %}
+        <div class="pagination">
+            <ul>
+                <li class="previous">
+                    <a href="/accounts/index/?p={{pre_page}}"<span class="glyphicon glyphicon-menu-left" aria-hidden="true"></span></a>
+                </li>
+                {% for page_num in page_nums %}
 				{% ifequal page_num cur_page %}
-				<li class="active"><a href="/mymusic/song-lib?p={{page_num}}">{{ page_num }} </a></li>
-				{% else %}
-				<li><a href="/mymusic/song-lib?p={{page_num}}">{{ page_num }} </a></li>
+                    <li class="active"><a href="/accounts/index/?p={{page_num}}">{{ page_num }}</a></li>
+                {% else %}
+				    <li><a href="/accounts/index/?p={{page_num}}">{{ page_num }}</a></li>
 				{% endifequal %}
-			{% endfor %}
-			<li><a href="/mymusic/song-lib?p={{nex_page}}"><span aria-hidden="true">&raquo;</span><span class="sr-only">Next</span></a>
-		</ul>
+				{% endfor %}
+                <li class="next">
+                    <a href="/accounts/index/?p={{nex_page}}"><span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span></a>
+                </li>
+            </ul>
+        </div>
 	</nav>
 </ul>
 

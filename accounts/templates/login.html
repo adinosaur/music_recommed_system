@@ -1,76 +1,63 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="icon" href="../../favicon.ico">
 
-    <title>Jumbotron Template for Bootstrap</title>
+{% extends "base.html" %} 
+{% block cdn %}
 
-    <!-- Bootstrap core CSS -->
-    <link href="http://cdn.bootcss.com/bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet">
+{% endblock %}
 
-    <!-- Custom styles for this template -->
-    <link href="jumbotron.css" rel="stylesheet">
-
-    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
-    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
-    <script src="../../assets/js/ie-emulation-modes-warning.js"></script>
-
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-      <script src="http://cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-      <script src="http://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
-  </head>
-
-  <body>
-    <nav class="navbar navbar-inverse navbar-fixed-top">
-      <div class="container">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="#">音乐推荐系统</a>
+{% block content %} 
+    <div class="starter-template">
+        <div class="container">
+        <style type="text/css">
+        body{ 
+            background: url({{ MEDIA_URL }}pictures/20100723153502478.jpg)no-repeat;
+            background-size:cover; 
+        }
+        .hub-overlay {
+            width: 400px;
+            margin-left: 20px;
+            margin-top: 80px;
+            margin-bottom: 80px;
+            background-color: rgba(36,50,55,0.4);
+            border-radius: 4px;
+            padding: 30px 40px;
+            padding-bottom: 40px;
+            color: rgba(255,255,255,0.8);
+        }
+        </style>
+            <div class="row">
+                <div class="col-xs-12 col-md-8">
+                </div>
+                <div class="col-xs-6 col-md-4">
+                    <div class="hub-overlay">
+                        <h3>登录音乐推荐系统</h3>
+                        <form class="hub-signup-form" method="post" action="">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <div class="input-group-addon"><span class="glyphicon glyphicon-user" aria-hidden="true"></span></div>
+                                    <input class="form-control" id="id_username" maxlength="30" name="username" placeholder="Username" type="text" />
+                                </div>
+                                
+                            </div>
+                            <div class="form-group">
+                                <div class="form-group">
+                                <div class="input-group">
+                                    <div class="input-group-addon"><span class="glyphicon glyphicon-lock" aria-hidden="true"></span></div>
+                                    <input class="form-control" id="id_password" maxlength="30" name="password" placeholder="Password" type="password" />
+                                </div>
+                                {% if tips %}
+                                <strong>{{tips_title}}</strong>
+                                {{tips_message}}
+                                {% endif %}
+                            </div>
+                            <button class="btn btn-primary btn-block" type="submit">登录</button>
+                            <a href="/accounts/register/"><input type="button" value="注册" class="btn btn-success btn-block"></a>
+                        </form>
+                    </div>
+                </div>
+            </div> 
         </div>
-        <div id="navbar" class="navbar-collapse collapse">
-            <form class="navbar-form navbar-right" action="" method="post">
-                {% csrf_token %}
-                {{ form }}
-                <input type="submit" value="登录" class="btn btn-success">
-                <a href="/accounts/register/"><input type="button" value="注册" class="btn btn-success"></a>
-            </form>
-        </div><!--/.navbar-collapse -->
-      </div>
-    </nav>
-    {% if tips %}
-    <div class="alert alert-error">
-        <button type="button" class="close" data-dismiss="alert">×</button>
-        <strong>{{tips_title}}</strong>
-        {{tips_message}}
-    </div>
-    {% endif %}
-    <!-- Main jumbotron for a primary marketing message or call to action -->
-    <div class="jumbotron">
-      <div class="container">
-        <h1>你好</h1>
-        <p>这是一个可以定制信息的网站.身边种类繁多的网页让你眼花缭乱吗?苦恼于如何找出自己感兴趣的网页吗?交给我们把,我们可以帮你解决这个问题!</p>
-        <p><a class="btn btn-primary btn-lg" href="#" role="button">了解更多 &raquo;</a></p>
-      </div>
-    </div>
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="http://cdn.bootcss.com/jquery/1.11.2/jquery.min.js"></script>
-    <script src="http://cdn.bootcss.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
-    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
-  </body>
-</html>
-
+    </div>      
+        </div>
+    </div><!-- /.container -->
+{% endblock %} 
