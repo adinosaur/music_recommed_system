@@ -8,6 +8,7 @@ class SharedMusic(models.Model):
 	song = models.ForeignKey(Song)
 	comment = models.CharField(max_length=255)
 	datetime = models.DateTimeField() 
+	favour = models.IntegerField(default=0) 
 
 class Attention(models.Model):
 	user = models.ForeignKey(User, related_name='attendingUser')
@@ -18,4 +19,4 @@ class SharedMusicComment(models.Model):
 	user = models.ForeignKey(User)
 	comment = models.CharField(max_length=255)
 	datetime = models.DateTimeField()
-	favour = models.IntegerField(default=0) 
+	

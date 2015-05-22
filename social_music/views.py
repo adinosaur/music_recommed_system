@@ -78,6 +78,12 @@ def share(request):
 	sharedMusicCount = SharedMusic.objects.filter(user=request.user).count()
 	followingCount = len(attentions)
 	followedCount = Attention.objects.filter(attendedUser=request.user).count()
+	for sharedMusic in sharedMusics:
+		sharedMusic.comments = SharedMusicComment.objects.filter(sharedMusic=sharedMusic).order_by("datetime")
+		for comment in sharedMusic.comments:
+			comment.datetime = comment.datetime.strftime("%Y/%m/%d %H:%M")
+		sharedMusic.datetime = sharedMusic.datetime.strftime("%Y/%m/%d %H:%M")
+
 	return  render_to_response(
 			'share.html',
 			RequestContext(request,{	'sharedMusics':sharedMusics,
@@ -86,24 +92,36 @@ def share(request):
 										'followingCount': followingCount,
 										'followedCount': followedCount}))
 
+@csrf_exempt
 @login_required
 def comment(request):
 	if request.method == 'POST':
 		sharedMusicComment = SharedMusicComment()
 		try:
-			sharedMusicID = request.POST['id']
+			sharedMusicID = request.POST['comment_id']
 		except KeyError, e:
 			print "[INFO]social-music.views.comment: wrong sharedMusicID!"
 			print e
 
-		print "[INFO]social-music.views.comment: sharedMusicID=%s" %request.POST['id']
+		print "[INFO]social-music.views.comment: sharedMusicID=%s" %request.POST['comment_id']
 		print "[INFO]social-music.views.comment: comment=%s" %request.POST['comment']
 
-		sharedMusicComment.song = sharedMusic.objects.get(pk=sharedMusicID)
+		print request.POST
+
+		sharedMusicComment.sharedMusic = SharedMusic.objects.get(pk=sharedMusicID)
 		sharedMusicComment.user = request.user
 		sharedMusicComment.comment = request.POST['comment']
 		sharedMusicComment.datetime = datetime.now()
-		sharedMusicComment.favour = 0
 		sharedMusicComment.save()
+
+		return HttpResponseRedirect('/social-music/share/')
+
+@csrf_exempt
+@login_required
+def remove_comment(request):
+	if request.method == 'POST':
+		sharedMusicCommentID = request.POST['comment_id']
+		sharedMusicComment = SharedMusicComment.objects.get(pk=sharedMusicCommentID)
+		sharedMusicComment.delete()
 
 		return HttpResponseRedirect('/social-music/share/')

@@ -110,3 +110,16 @@ function isFollowTab(el){
     }
     el.setAttribute('total',newtotal);
 }
+
+//social-music.templates.share.html
+function send_social_comment(){ 
+    var comment = document.getElementById("comment").value;
+    url="/social-music/comment/";
+    if (comment != ""){
+        var commentId = document.getElementById("comment_id").value;
+        var queryString = "comment=" + comment +"&comment_id=" + commentId;
+        send_post_request(url, queryString);
+        //reply(comment);
+        return false;
+    }
+}
