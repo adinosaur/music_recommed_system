@@ -6,5 +6,6 @@ urlpatterns = patterns('',
     url(r'^follow', views.follow),
     url(r'^unfollow', views.unfollow),
     url(r'^comment', views.comment),
+    url(r'reply',views.reply),
 )
 
