@@ -9,6 +9,10 @@
     <!-- Bootstrap core CSS -->
     <link href="http://cdn.bootcss.com/bootstrap/3.3.4/css/bootstrap.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="http://cdn.bootcss.com/bootstrap/3.3.4/css/bootstrap.css.map">
+    
+    <link href="{{ STATIC_URL }}Flat-UI-master/dist/css/vendor/bootstrap.min.css" rel="stylesheet">
+    <!-- Loading Flat UI -->
+    <link href="{{ STATIC_URL }}Flat-UI-master/dist/css/flat-ui.css" rel="stylesheet">
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -26,7 +30,7 @@
           <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
             <span class="sr-only">Toggle navigation</span>
             <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
+            <span class="icon-bar"></span> 
             <span class="icon-bar"></span>
           </button>
           <a class="navbar-brand" href="/accounts/index/">音乐推荐系统</a>
@@ -42,19 +46,28 @@
               <li {% block share %}{% endblock %}><a href="/social-music/share/">分享音乐</a></li>
             </ul>
             <form action="/mymusic/search-song" method="GET" class="navbar-form navbar-left" role="search">
-              <div class="form-group">                
-                <input type="text" name="key" class="form-control" placeholder="搜索音乐，歌手">
-                <button type="submit" class="btn btn-default">搜索</button>
+                <div class="form-group">
+                    <div class="input-group">             
+                        <input type="text" name="key" class="form-control" placeholder="搜索音乐，歌手">
+                        <span class="input-group-btn">
+                            <button type="submit" class="btn"><span class="fui-search"></span></button>
+                        </span>
+                    </div>
                 </div>
             </form>
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="/accounts/home?id={{user.id}}">我的主页</a></li>
-                <li class="pull-right"><a href="/accounts/logout/">退出</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{user}} <span class="glyphicon glyphicon-user" aria-hidden="true"></span<b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="/accounts/home?id={{user.id}}">我的主页</a></li>
+                        <li class="divider"></li>
+                        <li><a href="/accounts/logout/">退出</a></li>
+                    </ul>
+                </li>
             </ul>
         </div><!--/.nav-collapse -->
       </div>
     </nav>
-
     <div class="starter-template">
             <div class="container">
               {% block content %}

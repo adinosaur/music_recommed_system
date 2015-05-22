@@ -1,4 +1,7 @@
-body { font-size: 12px; line-height: 120%; text-align: center; color:#333; padding: 20px;}
+<<<<<<< HEAD
+
+=======
+>>>>>>> 43d14ad99fb268717a8d1dcf5382817d2e94b7c5
         a { color: #333; text-decoration: none;}
         a:hover { text-decoration: underline;}
         * { margin: 0; padding: 0; border: none;}

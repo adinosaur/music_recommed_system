@@ -32,18 +32,21 @@ window.onload = function () {
         var txt = el.innerHTML;
         var praisesTotal = box.getElementsByClassName('praises-total')[0];
         var oldTotal = parseInt(praisesTotal.getAttribute('total'));
+        var id = box.getAttribute('data-shared-music')
         var newTotal;
         if (txt == '赞') {
             newTotal = oldTotal + 1;
             praisesTotal.setAttribute('total', newTotal);
             praisesTotal.innerHTML = (newTotal == 1) ? '我觉得很赞' : '我和' + oldTotal + '个人觉得很赞';
             el.innerHTML = '取消赞';
+            createFavour(id);
         }
         else {
             newTotal = oldTotal - 1;
             praisesTotal.setAttribute('total', newTotal);
             praisesTotal.innerHTML = (newTotal == 0) ? '' : newTotal + '个人觉得很赞';
             el.innerHTML = '赞';
+            removeFavour(id);
         }
         praisesTotal.style.display = (newTotal == 0) ? 'none' : 'block';
     }
@@ -53,14 +56,15 @@ window.onload = function () {
      * @param box 每个分享的div容器
      * @param el 点击的元素
      */
-    function reply(box, el) {
+    function reply(box, el, img) {
+        send_social_comment();
         var commentList = box.getElementsByClassName('comment-list')[0];
         var textarea = box.getElementsByClassName('comment')[0];
         var commentBox = document.createElement('div');
         commentBox.className = 'comment-box clearfix';
         commentBox.setAttribute('user', 'self');
         commentBox.innerHTML =
-            '<img class="myhead" src="images/my.jpg" alt=""/>' +
+            '<img class="myhead" src=' + img + ' alt=""/>' +
                 '<div class="comment-content">' +
                 '<p class="comment-text"><span class="user">我：</span>' + textarea.value + '</p>' +
                 '<p class="comment-time">' +
@@ -113,7 +117,9 @@ window.onload = function () {
             textarea.onkeyup();
         }
         else {
+            remove_social_comment(el.parentNode.parentNode.parentNode.getAttribute('data-comment-id'));
             removeNode(commentBox);
+            //alert('removing!')
         }
     }
 
@@ -138,7 +144,7 @@ window.onload = function () {
 
                 //回复按钮蓝
                 case 'btn':
-                    reply(el.parentNode.parentNode.parentNode, el);
+                   reply(el.parentNode.parentNode.parentNode, el, el.getAttribute('data-head'));
                     break
 
                 //回复按钮灰

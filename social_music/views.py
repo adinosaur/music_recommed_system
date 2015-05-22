@@ -12,6 +12,7 @@ from mymusic.models import Song
 from models import Attention
 from models import SharedMusic
 from models import SharedMusicComment
+from models import FavSharedMusic
 from datetime import datetime
 
 # Create your views here.
@@ -78,6 +79,12 @@ def share(request):
 	sharedMusicCount = SharedMusic.objects.filter(user=request.user).count()
 	followingCount = len(attentions)
 	followedCount = Attention.objects.filter(attendedUser=request.user).count()
+	for sharedMusic in sharedMusics:
+		sharedMusic.comments = SharedMusicComment.objects.filter(sharedMusic=sharedMusic).order_by("datetime")
+		for comment in sharedMusic.comments:
+			comment.datetime = comment.datetime.strftime("%Y/%m/%d %H:%M")
+		sharedMusic.datetime = sharedMusic.datetime.strftime("%Y/%m/%d %H:%M")
+
 	return  render_to_response(
 			'share.html',
 			RequestContext(request,{	'sharedMusics':sharedMusics,
@@ -86,24 +93,65 @@ def share(request):
 										'followingCount': followingCount,
 										'followedCount': followedCount}))
 
+@csrf_exempt
 @login_required
 def comment(request):
 	if request.method == 'POST':
 		sharedMusicComment = SharedMusicComment()
 		try:
-			sharedMusicID = request.POST['id']
+			sharedMusicID = request.POST['comment_id']
 		except KeyError, e:
 			print "[INFO]social-music.views.comment: wrong sharedMusicID!"
 			print e
 
-		print "[INFO]social-music.views.comment: sharedMusicID=%s" %request.POST['id']
+		print "[INFO]social-music.views.comment: sharedMusicID=%s" %request.POST['comment_id']
 		print "[INFO]social-music.views.comment: comment=%s" %request.POST['comment']
+		print request.POST
 
-		sharedMusicComment.song = sharedMusic.objects.get(pk=sharedMusicID)
+		sharedMusicComment.sharedMusic = SharedMusic.objects.get(pk=sharedMusicID)
 		sharedMusicComment.user = request.user
 		sharedMusicComment.comment = request.POST['comment']
 		sharedMusicComment.datetime = datetime.now()
-		sharedMusicComment.favour = 0
 		sharedMusicComment.save()
 
+		return HttpResponseRedirect('/social-music/share/')
+
+@csrf_exempt
+@login_required
+def remove_comment(request):
+	if request.method == 'POST':
+		sharedMusicCommentID = request.POST['comment_id']
+		sharedMusicComment = SharedMusicComment.objects.get(pk=sharedMusicCommentID)
+		if request.user == sharedMusicComment.user:
+			print "[INFO]social-music.views.remove_comment: commentID=%s" %sharedMusicCommentID
+			sharedMusicComment.delete()
+		else:
+			print "[ERROR]social-music.views.remove_comment: cannot remove commentID=%s" %sharedMusicCommentID
+		return HttpResponseRedirect('/social-music/share/')
+
+@csrf_exempt
+@login_required
+def create_fav(request):
+	if request.method == 'POST':
+		sharedMusicID = request.POST['id']
+		sharedMusic = SharedMusic.objects.get(pk=sharedMusicID)
+		try:
+			FavSharedMusic.objects.get(sharedMusic=sharedMusic, user=request.user)
+		except FavSharedMusic.DoesNotExist:
+			favSharedMusic = FavSharedMusic()
+			favSharedMusic.sharedMusic = sharedMusic
+			favSharedMusic.user = request.user
+			favSharedMusic.save()
+			print "[INFO]social-music.views.create_fav: success"
+		return HttpResponseRedirect('/social-music/share/')
+
+@csrf_exempt
+@login_required
+def remove_fav(request):
+	if request.method == 'POST':
+		sharedMusicID = request.POST['id']
+		sharedMusic = SharedMusic.objects.get(pk=sharedMusicID)
+		favSharedMusic = FavSharedMusic.objects.get(sharedMusic=sharedMusic, user=request.user)
+		favSharedMusic.delete()
+		print "[INFO]social-music.views.remove_fav: success"
 		return HttpResponseRedirect('/social-music/share/')

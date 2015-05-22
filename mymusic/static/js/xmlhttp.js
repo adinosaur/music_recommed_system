@@ -80,7 +80,7 @@ function cancelFavourComment(commentID){
 
 // accounts.templates.home.html文件
 function follow(uid){
-    url="/social-music/follow/"; 
+    url="/social-music/follow/";
     value = "uid=" + uid
     send_post_request(url, value);
     return false;
@@ -109,4 +109,38 @@ function isFollowTab(el){
         el.innerHTML='贊('+newtotal+')';
     }
     el.setAttribute('total',newtotal);
+}
+
+//social-music.templates.share.html
+function send_social_comment(){ 
+    var comment = document.getElementById("comment").value;
+    url="/social-music/comment/";
+    if (comment != ""){
+        var commentId = document.getElementById("comment_id").value;
+        var queryString = "comment=" + comment +"&comment_id=" + commentId;
+        send_post_request(url, queryString);
+        //reply(comment);
+        return false;
+    }
+}
+
+function remove_social_comment(commentID){ 
+    url="/social-music/remove-comment/";
+    var queryString = "comment_id=" + commentID;
+    send_post_request(url, queryString);
+    return false;
+}
+
+function createFavour(commentID){
+    url="/social-music/create-fav/"; 
+    var queryString = "id=" + commentID;
+    send_post_request(url, queryString);
+    return false;
+}
+
+function removeFavour(commentID){
+    url="/social-music/remove-fav/"; 
+    var queryString = "id=" + commentID;
+    send_post_request(url, queryString);
+    return false;
 }

@@ -9,21 +9,21 @@ class="active"
 
 
 {% block content %}
-<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/share.css">
-<script type="text/javascript" src="{{STATIC_URL}}js/share.js"></script>
 <script src= "{{ STATIC_URL }}js/xmlhttp.js"></script>
+<script type="text/javascript" src="{{STATIC_URL}}js/share.js"></script>
 <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css"> 
+<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/share.css">
 <div class="row">
   <div class="col-xs-12 col-md-8">
     <div id="list">
         {% for sharedMusic in sharedMusics%}
-        <div class="box clearfix">
+        <div class="box clearfix" data-shared-music="{{ sharedMusic.id }}">
             <a class="close" href="javascript:;">×</a>
             <img class="head" src="{{ MEDIA_URL }}heads/{{head}}" alt=""/>
             <div class="content">
                 <div class="main">
                     <p class="txt">
-                        <span class="user">{{ sharedMusic.user }}</span>{{ sharedMusic.comment }}
+                        <span class="user">{{ sharedMusic.user }}:</span>{{ sharedMusic.comment }}
                     </p>
                     <div id="player_{{ sharedMusic.id }}"></div>
                 </div>
@@ -31,23 +31,36 @@ class="active"
                     <span class="time">{{ sharedMusic.datetime }}</span>
                     <a class="praise" href="javascript:;">赞</a>
                 </div>
-                <div class="praises-total" total="4" style="display: block;">4个人觉得很赞</div>
+                {% if sharedMusics.favour > 0 %}
+                <div class="praises-total" total="{{sharedMusics.favour}}" style="display: block;">{{sharedMusics.favour}}个人觉得很赞</div>
+                {% else %}
+                <div class="praises-total" total="{{sharedMusics.favour}}" style="display: block;"></div>
+                {% endif %}
                 <div class="comment-list">
                     <div class="comment-box clearfix" user="self">
-                        <img class="myhead" src="{{ MEDIA_URL }}heads/{{head}}" alt=""/>
-                        <div class="comment-content">
-                            <p class="comment-text"><span class="user">我：</span>写的太好了。</p>
-                            <p class="comment-time">
-                                {{ sharedMusic.datetime }}
-                                <a href="javascript:;" class="comment-praise" total="1" my="0" style="display: inline-block">1 赞</a>
-                                <a href="javascript:;" class="comment-operate">删除</a>
-                            </p>
+                        {% for comment in sharedMusic.comments %}
+                        <div data-comment-id="{{comment.id}}">
+                            <img class="myhead" src="{{ MEDIA_URL }}heads/{{head}}" alt=""/>
+                            <div class="comment-content">
+                                {% ifequal comment.user user%}
+                                <p class="comment-text"><span class="user">我：</span>{{comment.comment}}</p>
+                                {% else %}
+                                <p class="comment-text"><span class="user">{{comment.user}}：</span>{{comment.comment}}</p>
+                                {% endifequal %}
+                                <p class="comment-time">
+                                    {{ comment.datetime }}
+                                    <a href="javascript:;" class="comment-praise" total="1" my="0" style="display: inline-block">赞</a>
+                                    <a href="javascript:;" class="comment-operate">删除</a>
+                                </p>
+                            </div>
                         </div>
+                        {% endfor %}
                     </div>
                 </div>
+                <input name="comment_id" id="comment_id" value="{{sharedMusic.pk}}" style="display:none"/>
                 <div class="text-box">
-                    <textarea class="comment" autocomplete="off">评论…</textarea>
-                    <button class="btn ">回 复</button>
+                    <textarea class="comment" id="comment" name="comment">评论…</textarea>
+                    <button class="btn" data-head="{{ MEDIA_URL }}heads/{{head}}">回 复</button>
                     <span class="word"><span class="length">0</span>/140</span>
                 </div>
             </div>

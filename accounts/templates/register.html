@@ -1,77 +1,66 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="icon" href="../../favicon.ico">
+{% extends "base.html" %} 
+{% block cdn %}
 
-    <title>Jumbotron Template for Bootstrap</title>
+{% endblock %}
 
-    <!-- Bootstrap core CSS -->
-    <link href="http://cdn.bootcss.com/bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Custom styles for this template -->
-    <link href="jumbotron.css" rel="stylesheet">
-
-    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
-    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
-    <script src="../../assets/js/ie-emulation-modes-warning.js"></script>
-
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-      <script src="http://cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-      <script src="http://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
-  </head>
-
-  <body>
-    <nav class="navbar navbar-inverse navbar-fixed-top">
+{% block content %}
+    <div class="starter-template">
       <div class="container">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="#">音乐推荐系统</a>
-        </div>
-      </div>
-    </nav>
-    {% if tips %}
-    <div class="alert alert-error">
-        <button type="button" class="close" data-dismiss="alert">×</button>
-        <strong>{{tips_title}}</strong>
-        {{tips_message}}
-    </div>
-    {% endif %}
-    <!-- Main jumbotron for a primary marketing message or call to action -->
-
-    <div class="jumbotron">
-      <div class="container">
-          <h2>
-              <small>
-                  请填写用于注册的个人信息
-              </small>
-          </h2>
-        <form class="form-horizontal" action="" method="post">
-            {% csrf_token %}
-            {{ form }}
-            <input type="submit" value="注册" class="btn btn-primary">
-        </form>
+        <div class="row">
+            <div class="col-md-3"></div>
+            <div class="col-md-6">
+                
+                <div class="hub-overlay">
+                    <h2>个人信息</h2>
+                    <form class="form-horizontal" action="" method="post">
+                    {% csrf_token %}
+                        <div class="form-group">
+                            <div class="input-group">
+                                <div class="input-group-addon"><span class="glyphicon glyphicon-user" aria-hidden="true"></span></div>
+                                <input class="form-control" id="id_username" maxlength="30" name="username" placeholder="Username" type="text" />
+                            </div>
+                            {% if tips %}
+                            <strong>{{tips_title}}</strong>
+                            {{tips_message}}
+                            {% endif %}
+                        </div>
+                        <div class="form-group">
+                            <div class="input-group">
+                                <div class="input-group-addon"><span class="glyphicon glyphicon-lock" aria-hidden="true"></span></div>
+                                <input class="form-control" id="id_password" maxlength="30" name="password" placeholder="Password" type="password" />
+                            </div>
+                            {% if tips %}
+                            <strong>{{tips_title}}</strong>
+                            {{tips_message}}
+                            {% endif %}
+                        </div>
+                        <div class="form-group">
+                            <div class="input-group">
+                                <div class="input-group-addon"><span class="glyphicon glyphicon-lock" aria-hidden="true"></span></div>
+                                <input class="form-control" id="id_password_again" maxlength="30" name="password_again" placeholder="Password Again" type="password" />
+                            </div>
+                            {% if tips %}
+                            <strong>{{tips_title}}</strong>
+                            {{tips_message}}
+                            {% endif %}
+                        </div>
+                        <div class="form-group">
+                            <div class="input-group">
+                                <div class="input-group-addon"><span class="glyphicon glyphicon-envelope" aria-hidden="true"></span></div>
+                                <input class="form-control" id="id_email" maxlength="30" name="email" placeholder="Email" type="email" />
+                            </div>
+                            {% if tips %}
+                            <strong>{{tips_title}}</strong>
+                            {{tips_message}}
+                            {% endif %}
+                        </div>
+                        <button class="btn btn-block btn-primary" type="submit">注册</button>
+                    </form>
+                </div>
+            </div>
+            <div class="col-md-2"></div>
       </div>
     </div>
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="http://cdn.bootcss.com/jquery/1.11.2/jquery.min.js"></script>
-    <script src="http://cdn.bootcss.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
-    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
-  </body>
-</html>
+{% endblock %}
 
 

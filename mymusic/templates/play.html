@@ -13,7 +13,7 @@
 <script src= "{{ STATIC_URL }}js/xmlhttp.js"></script>
 <script src= "{{ STATIC_URL }}js/favour.js"></script>
 <script src= "{{ STATIC_URL }}h5player/dist/player-with-css.min.js"></script> 
-<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css"> 
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
 <div class="row">
   <div class="col-xs-12 col-md-8">
       <div class="row">
@@ -22,11 +22,11 @@
         </div>
         <div class="col-xs-6 col-md-6"> 
           <div id="title">
-            <h2><small>歌曲：</small>{{song.title}}</h2>
+            <h3><small>歌曲：</small>{{song.title}}</h3>
             <h4><small>歌手：</small>{{song.singer}}</h4>
             <a class="btn btn-primary" onclick="send_playmusic_request({{song.pk}})" href="/mymusic/play?id={{song.pk}}"><span class="glyphicon glyphicon-play-circle" aria-hidden="true">立即播放</span></a>
-            <a class="btn btn-default" href="/mymusic/favour?id={{song.pk}}"><span class="glyphicon glyphicon-ok-circle" aria-hidden="true">收藏</span></a>
-            <a class="btn btn-default" data-target="#myModal" data-toggle="modal"><span class="glyphicon glyphicon-share" arai-hidden="true">分享</span></a>
+            <a class="btn btn-info" href="/mymusic/favour?id={{song.pk}}"><span class="glyphicon glyphicon-ok-circle" aria-hidden="true">收藏</span></a>
+            <a class="btn btn-info" data-target="#myModal" data-toggle="modal" onclick="share()"><span class="glyphicon glyphicon-share" arai-hidden="true">分享</span></a>
           </div>
           <!-- href="/social-music/share/?id={{song.id}}" -->
             <div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -50,7 +50,7 @@
                       <textarea class="form-control" rows="4" id="share_comment" name="share_comment">说点什么吧</textarea>
                       <input name="song_id" value="{{song.pk}}" style="display:none">
                       <input type="submit" class="btn btn-primary pull-right" id="share_button" value="分享">
-                      <span class="word pull-right" id='share_word'>0/140</span>
+                      <span class="word pull-right" id='share_word'>5/140</span>
                     </form>
                   </div>
                   <div class="modal-footer">

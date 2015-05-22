@@ -56,3 +56,27 @@ window.onload = function(){
             word.innerHTML='0/140';
     }
 }
+
+function share(){
+    var textArea = document.getElementById('share_comment');
+    var tj_button = document.getElementById('share_button')
+    var word = document.getElementById('share_word');
+
+    textArea.onfocus = function(){
+        this.value = this.value == '说点什么吧' ? '' : this.value;
+        textArea.onkeyup();
+    }
+    textArea.onblur = function(){
+        this.value=this.value==''?'说点什么吧':this.value;
+    }
+    textArea.onkeyup=function(){
+        var val = this.value;
+        var len = val.length;
+        if(len<=0||len>140){
+            tj_button.disabled='disabled';
+        }
+        else
+            tj_button.disabled='';
+        word.innerHTML=len + '/140';
+    }
+}

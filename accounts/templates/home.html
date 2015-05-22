@@ -6,9 +6,9 @@
 class="active"
 {% endblock %}
 
-
 {% block content %} 
 <script src= "{{ STATIC_URL }}js/xmlhttp.js"></script>
+<script src= "{{ STATIC_URL }}js/home.js"></script>
 <div class="row">
   <div class="col-xs-12 col-md-8">
   	<div class="row">
@@ -21,9 +21,9 @@ class="active"
   			<h3>{{theuser}}</h3>
         {% ifnotequal user theuser %}
           {% ifequal isFollow False %}
-          <a class="btn btn-primary" onclick="follow({{theuser.id}})" href="javascript:;" role="button"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>关注</a>
+          <a class="btn btn-primary" onclick="change({{theuser.id}})" id="focus" href="javascript:void(0);" role="button"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>关注</a>
           {% else %}
-          <a class="btn btn-primary" onclick="unfollow({{theuser.id}})" href="javascript:;" role="button"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>取消关注</a>
+          <a class="btn btn-primary" onclick="change({{theuser.id}})" id="focus" href="javascript:void(0);" role="button"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>取消关注</a>
           {% endifequal %}
         {% endifnotequal %}
 		  </div>
@@ -35,3 +35,6 @@ class="active"
   </div>
 </div>
 {% endblock %}  
+
+
+

@@ -12,7 +12,7 @@ function formateDate(date) {
     return y + '日' + m + '月' + d + '日 ' + h + ':' + mi;
 }
 
-function load(){
+/*function load(){
     var list = document.getElementById('comment-List');
     var lis = list.children;
     for(var i=0; i<lis.length;i++){
@@ -26,7 +26,7 @@ function load(){
             }
         }
     }
-}
+}*/
 
 function reply(comment) {
     var commentList = document.getElementById('comment-List');  
