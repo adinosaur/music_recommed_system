@@ -105,7 +105,6 @@ def comment(request):
 
 		print "[INFO]social-music.views.comment: sharedMusicID=%s" %request.POST['comment_id']
 		print "[INFO]social-music.views.comment: comment=%s" %request.POST['comment']
-
 		print request.POST
 
 		sharedMusicComment.sharedMusic = SharedMusic.objects.get(pk=sharedMusicID)
@@ -122,6 +121,9 @@ def remove_comment(request):
 	if request.method == 'POST':
 		sharedMusicCommentID = request.POST['comment_id']
 		sharedMusicComment = SharedMusicComment.objects.get(pk=sharedMusicCommentID)
-		sharedMusicComment.delete()
-
+		if request.user == sharedMusicComment.user:
+			print "[INFO]social-music.views.remove_comment: commentID=%s" %sharedMusicCommentID
+			sharedMusicComment.delete()
+		else:
+			print "[ERROR]social-music.views.remove_comment: cannot remove commentID=%s" %sharedMusicCommentID
 		return HttpResponseRedirect('/social-music/share/')

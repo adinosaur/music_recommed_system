@@ -114,7 +114,9 @@ window.onload = function () {
             textarea.onkeyup();
         }
         else {
+            remove_social_comment(el.parentNode.parentNode.parentNode.getAttribute('data-comment-id'));
             removeNode(commentBox);
+            //alert('removing!')
         }
     }
 

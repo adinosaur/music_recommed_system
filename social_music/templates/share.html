@@ -37,18 +37,20 @@ class="active"
                 <div class="comment-list">
                     <div class="comment-box clearfix" user="self">
                         {% for comment in sharedMusic.comments %}
-                        <img class="myhead" src="{{ MEDIA_URL }}heads/{{head}}" alt=""/>
-                        <div class="comment-content">
-                            {% ifequal comment.user user%}
-                            <p class="comment-text"><span class="user">我：</span>{{comment.comment}}</p>
-                            {% else %}
-                            <p class="comment-text"><span class="user">{{comment.user}}：</span>{{comment.comment}}</p>
-                            {% endifequal %}
-                            <p class="comment-time">
-                                {{ comment.datetime }}
-                                <a href="javascript:;" class="comment-praise" total="1" my="0" style="display: inline-block">1 赞</a>
-                                <a href="javascript:;" class="comment-operate">删除</a>
-                            </p>
+                        <div data-comment-id="{{comment.id}}">
+                            <img class="myhead" src="{{ MEDIA_URL }}heads/{{head}}" alt=""/>
+                            <div class="comment-content">
+                                {% ifequal comment.user user%}
+                                <p class="comment-text"><span class="user">我：</span>{{comment.comment}}</p>
+                                {% else %}
+                                <p class="comment-text"><span class="user">{{comment.user}}：</span>{{comment.comment}}</p>
+                                {% endifequal %}
+                                <p class="comment-time">
+                                    {{ comment.datetime }}
+                                    <a href="javascript:;" class="comment-praise" total="1" my="0" style="display: inline-block">赞</a>
+                                    <a href="javascript:;" class="comment-operate">删除</a>
+                                </p>
+                            </div>
                         </div>
                         {% endfor %}
                     </div>

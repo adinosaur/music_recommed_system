@@ -123,3 +123,10 @@ function send_social_comment(){
         return false;
     }
 }
+
+function remove_social_comment(commentID){ 
+    url="/social-music/remove-comment/";
+    var queryString = "comment_id=" + commentID;
+    send_post_request(url, queryString);
+    return false;
+}
