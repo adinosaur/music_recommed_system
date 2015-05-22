@@ -19,4 +19,8 @@ class SharedMusicComment(models.Model):
 	user = models.ForeignKey(User)
 	comment = models.CharField(max_length=255)
 	datetime = models.DateTimeField()
-	
+
+class FavSharedMusic(models.Model):
+	sharedMusic = models.ForeignKey(SharedMusic)
+	user = models.ForeignKey(User)
+		

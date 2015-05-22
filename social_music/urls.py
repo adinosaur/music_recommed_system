@@ -7,5 +7,7 @@ urlpatterns = patterns('',
     url(r'^unfollow', views.unfollow),
     url(r'^comment', views.comment),
     url(r'^remove-comment', views.remove_comment),
+    url(r'^create-fav', views.create_fav),
+    url(r'^remove-fav', views.remove_fav),
 )
 

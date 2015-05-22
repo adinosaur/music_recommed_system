@@ -130,3 +130,17 @@ function remove_social_comment(commentID){
     send_post_request(url, queryString);
     return false;
 }
+
+function createFavour(commentID){
+    url="/social-music/create-fav/"; 
+    var queryString = "id=" + commentID;
+    send_post_request(url, queryString);
+    return false;
+}
+
+function removeFavour(commentID){
+    url="/social-music/remove-fav/"; 
+    var queryString = "id=" + commentID;
+    send_post_request(url, queryString);
+    return false;
+}

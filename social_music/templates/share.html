@@ -17,7 +17,7 @@ class="active"
   <div class="col-xs-12 col-md-8">
     <div id="list">
         {% for sharedMusic in sharedMusics%}
-        <div class="box clearfix">
+        <div class="box clearfix" data-shared-music="{{ sharedMusic.id }}">
             <a class="close" href="javascript:;">×</a>
             <img class="head" src="{{ MEDIA_URL }}heads/{{head}}" alt=""/>
             <div class="content">
@@ -32,7 +32,9 @@ class="active"
                     <a class="praise" href="javascript:;">赞</a>
                 </div>
                 {% if sharedMusics.favour > 0 %}
-                <div class="praises-total" total="4" style="display: block;">{{sharedMusics.favour}}个人觉得很赞</div>
+                <div class="praises-total" total="{{sharedMusics.favour}}" style="display: block;">{{sharedMusics.favour}}个人觉得很赞</div>
+                {% else %}
+                <div class="praises-total" total="{{sharedMusics.favour}}" style="display: block;"></div>
                 {% endif %}
                 <div class="comment-list">
                     <div class="comment-box clearfix" user="self">

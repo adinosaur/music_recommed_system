@@ -32,18 +32,21 @@ window.onload = function () {
         var txt = el.innerHTML;
         var praisesTotal = box.getElementsByClassName('praises-total')[0];
         var oldTotal = parseInt(praisesTotal.getAttribute('total'));
+        var id = box.getAttribute('data-shared-music')
         var newTotal;
         if (txt == '赞') {
             newTotal = oldTotal + 1;
             praisesTotal.setAttribute('total', newTotal);
             praisesTotal.innerHTML = (newTotal == 1) ? '我觉得很赞' : '我和' + oldTotal + '个人觉得很赞';
             el.innerHTML = '取消赞';
+            createFavour(id);
         }
         else {
             newTotal = oldTotal - 1;
             praisesTotal.setAttribute('total', newTotal);
             praisesTotal.innerHTML = (newTotal == 0) ? '' : newTotal + '个人觉得很赞';
             el.innerHTML = '赞';
+            removeFavour(id);
         }
         praisesTotal.style.display = (newTotal == 0) ? 'none' : 'block';
     }

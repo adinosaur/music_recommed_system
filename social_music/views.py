@@ -12,6 +12,7 @@ from mymusic.models import Song
 from models import Attention
 from models import SharedMusic
 from models import SharedMusicComment
+from models import FavSharedMusic
 from datetime import datetime
 
 # Create your views here.
@@ -126,4 +127,31 @@ def remove_comment(request):
 			sharedMusicComment.delete()
 		else:
 			print "[ERROR]social-music.views.remove_comment: cannot remove commentID=%s" %sharedMusicCommentID
+		return HttpResponseRedirect('/social-music/share/')
+
+@csrf_exempt
+@login_required
+def create_fav(request):
+	if request.method == 'POST':
+		sharedMusicID = request.POST['id']
+		sharedMusic = SharedMusic.objects.get(pk=sharedMusicID)
+		try:
+			FavSharedMusic.objects.get(sharedMusic=sharedMusic, user=request.user)
+		except FavSharedMusic.DoesNotExist:
+			favSharedMusic = FavSharedMusic()
+			favSharedMusic.sharedMusic = sharedMusic
+			favSharedMusic.user = request.user
+			favSharedMusic.save()
+			print "[INFO]social-music.views.create_fav: success"
+		return HttpResponseRedirect('/social-music/share/')
+
+@csrf_exempt
+@login_required
+def remove_fav(request):
+	if request.method == 'POST':
+		sharedMusicID = request.POST['id']
+		sharedMusic = SharedMusic.objects.get(pk=sharedMusicID)
+		favSharedMusic = FavSharedMusic.objects.get(sharedMusic=sharedMusic, user=request.user)
+		favSharedMusic.delete()
+		print "[INFO]social-music.views.remove_fav: success"
 		return HttpResponseRedirect('/social-music/share/')
