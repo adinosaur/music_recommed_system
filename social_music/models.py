@@ -23,4 +23,9 @@ class SharedMusicComment(models.Model):
 class FavSharedMusic(models.Model):
 	sharedMusic = models.ForeignKey(SharedMusic)
 	user = models.ForeignKey(User)
-		
+
+class UserNews(models.Model):
+	user = models.ForeignKey(User)
+	news = models.CharField(max_length = 255)
+	sharedmusic = models.ForeignKey(SharedMusic)
+
