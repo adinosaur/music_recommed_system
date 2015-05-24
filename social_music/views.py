@@ -13,6 +13,7 @@ from models import Attention
 from models import SharedMusic
 from models import SharedMusicComment
 from models import FavSharedMusic
+from models import UserNews
 from datetime import datetime
 
 # Create your views here.
@@ -84,14 +85,17 @@ def share(request):
 		for comment in sharedMusic.comments:
 			comment.datetime = comment.datetime.strftime("%Y/%m/%d %H:%M")
 		sharedMusic.datetime = sharedMusic.datetime.strftime("%Y/%m/%d %H:%M")
-
+	newsCount = UserNews.objects.filter(user = request.user).count()
+	usernews = UserNews.objects.filter(user = request.user)
 	return  render_to_response(
 			'share.html',
 			RequestContext(request,{	'sharedMusics':sharedMusics,
 										'head': usermessage.head,
 										'sharedMusicCount': sharedMusicCount,
 										'followingCount': followingCount,
-										'followedCount': followedCount}))
+										'followedCount': followedCount,
+										'newsCount': newsCount,
+										'usernews': usernews}))
 
 @csrf_exempt
 @login_required
@@ -113,7 +117,12 @@ def comment(request):
 		sharedMusicComment.comment = request.POST['comment']
 		sharedMusicComment.datetime = datetime.now()
 		sharedMusicComment.save()
-
+		usernews = UserNews()
+		usernews.user = sharedMusicComment.sharedMusic.user
+		usernews.news = '%s 评论了您.' % request.user
+		usernews.sharedmusic = sharedMusicComment.sharedMusic
+		usernews.save()
+		print usernews.news
 		return HttpResponseRedirect('/social-music/share/')
 
 @csrf_exempt
@@ -142,6 +151,12 @@ def create_fav(request):
 			favSharedMusic.sharedMusic = sharedMusic
 			favSharedMusic.user = request.user
 			favSharedMusic.save()
+			usernews = UserNews()
+			usernews.user = sharedMusicComment.sharedMusic.user
+			usernews.news = '%s 点赞了您.' % request.user
+			usernews.sharedmusic = sharedMusicComment.sharedMusic
+			usernews.save()
+			print usernews.news
 			print "[INFO]social-music.views.create_fav: success"
 		return HttpResponseRedirect('/social-music/share/')
 
@@ -155,3 +170,10 @@ def remove_fav(request):
 		favSharedMusic.delete()
 		print "[INFO]social-music.views.remove_fav: success"
 		return HttpResponseRedirect('/social-music/share/')
+
+@csrf_exempt
+@login_required
+def checknews(request):
+	usernews = UserNews.objects.filter(user = request.user)
+	usernews.delete()
+	return HttpResponseRedirect('/social-music/share/')

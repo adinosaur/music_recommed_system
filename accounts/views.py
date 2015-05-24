@@ -29,7 +29,6 @@ def register(request):
             password = request.POST.get('password', '')
             password_again = request.POST.get('password_again', '')
             email = request.POST.get('email', '')
- 
             try:
                 user = User.objects.get(username=username)
             except User.DoesNotExist:
@@ -122,6 +121,7 @@ def index(request):
 
 @login_required
 def home(request):
+    #访问个人主页
     if request.method == 'GET':
         id = request.GET['id']
         user = User.objects.get(pk=id)
