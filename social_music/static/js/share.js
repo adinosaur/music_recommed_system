@@ -57,7 +57,7 @@ window.onload = function () {
      * @param el 点击的元素
      */
     function reply(box, el, img) {
-        send_social_comment();
+        send_social_comment(box.getAttribute('data-shared-music'), el.parentNode.children[0].value);
         var commentList = box.getElementsByClassName('comment-list')[0];
         var textarea = box.getElementsByClassName('comment')[0];
         var commentBox = document.createElement('div');

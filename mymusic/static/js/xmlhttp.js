@@ -118,12 +118,10 @@ function isFollowTab(el){
 }
 
 //social-music.templates.share.html
-function send_social_comment(){ 
-    var comment = document.getElementById("comment").value;
+function send_social_comment(commentID, comment){ 
     url="/social-music/comment/";
     if (comment != ""){
-        var commentId = document.getElementById("comment_id").value;
-        var queryString = "comment=" + comment +"&comment_id=" + commentId;
+        var queryString = "comment=" + comment +"&comment_id=" + commentID;
         send_post_request(url, queryString);
         //reply(comment);
         return false;

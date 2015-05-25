@@ -166,6 +166,7 @@ def comment(request):
 
 		print sharedMusicComment.sharedMusic.pk
 		print sharedMusicComment.pk
+		print sharedMusicComment.comment
 
 		#将新评论添加至消息系统中
 		userNews = UserNews()
@@ -185,6 +186,11 @@ def remove_comment(request):
 		sharedMusicComment = SharedMusicComment.objects.get(pk=sharedMusicCommentID)
 		if request.user == sharedMusicComment.user:
 			print "[INFO]social-music.views.remove_comment: commentID=%s" %sharedMusicCommentID
+
+			#同时还要删除UserNews中的评论（newsType=0）消息
+			userNews = UserNews.objects.get(newsType=0, newsID=sharedMusicCommentID)
+			userNews.delete()
+
 			sharedMusicComment.delete()
 		else:
 			print "[ERROR]social-music.views.remove_comment: cannot remove commentID=%s" %sharedMusicCommentID
@@ -226,6 +232,11 @@ def remove_fav(request):
 		sharedMusicID = request.POST['id']
 		sharedMusic = SharedMusic.objects.get(pk=sharedMusicID)
 		favSharedMusic = FavSharedMusic.objects.get(sharedMusic=sharedMusic, user=request.user)
+
+		#同时还要删除UserNews中的点赞（newsType=1）消息
+		userNews = UserNews.objects.get(newsType=1, newsID=sharedMusicID)
+		userNews.delete()
+
 		favSharedMusic.delete()
 		print "[INFO]social-music.views.remove_fav: success"
 		return HttpResponseRedirect('/social-music/share/')
