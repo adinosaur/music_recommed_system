@@ -11,6 +11,25 @@ class="active"
 {% block content %}
 <script src= "{{ STATIC_URL }}js/xmlhttp.js"></script>
 <script type="text/javascript" src="{{STATIC_URL}}js/share.js"></script>
+<script type="text/javascript">
+    window.onscroll=function(){
+        var a = /*document.documentElement.scrollTop==0? document.body.clientHeight : */document.documentElement.clientHeight;
+        var b = document.documentElement.scrollTop==0? document.body.scrollTop : document.documentElement.scrollTop;
+        var c = /*document.documentElement.scrollTop==0? document.body.scrollHeight : */document.documentElement.scrollHeight;
+        if(a+b==c)
+            alert('a:'+a+'b:'+b+'c:'+c);
+    }
+    /*var maginbot=0;
+    if(document.documentElement.scrollTop){
+        alert(maginbot+1);
+    }
+    else{
+        alert('body.scrollHeight:'+document.body.scrollHeight+'body.scrollTop'+document.body.scrollTop +'body.clientHeight'+document.body.clientHeight);
+        maginbot = document.body.scrollHeight - document.body.scrollTop - document.body.clientHeight;
+    }
+    alert(maginbot);
+}*/
+</script>
 <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css"> 
 <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/share.css">
 <div class="row">
