@@ -3,6 +3,7 @@ from social_music import views
 
 urlpatterns = patterns('',
     url(r'^share', views.share),
+    url(r'^json/share', views.share_json),
     url(r'^follow', views.follow),
     url(r'^unfollow', views.unfollow),
     url(r'^comment', views.comment),
