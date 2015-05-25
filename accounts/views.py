@@ -12,6 +12,7 @@ from mymusic.models import Song
 from mymusic.models import Singer
 from mymusic.pages_assistant import Page_Assistant
 from models import UserMessage
+from social_music.models import UserNews
 from social_music.models import Attention
 
 @csrf_exempt
@@ -110,6 +111,8 @@ def index(request):
         b, e = page_assistant.get_objects_by_pageno(cur_page)
         songs = Song.objects.all()[b:e]
 
+        #读取新消息的数量
+        newsCount = UserNews.objects.filter(toUser=request.user, seen=False).count()
         return render_to_response(
             'index.html', 
             RequestContext(request, {   'songs': songs,
@@ -117,7 +120,8 @@ def index(request):
                                         'page_nums': page_nums,
                                         'pre_page': pre_page,
                                         'cur_page': cur_page,
-                                        'nex_page': nex_page}))   
+                                        'nex_page': nex_page,
+                                        'newsCount': newsCount}))   
 
 @login_required
 def home(request):
@@ -137,9 +141,12 @@ def home(request):
         except Attention.DoesNotExist:
             isFollow = False
 
+        #读取新消息的数量
+        newsCount = UserNews.objects.filter(toUser=request.user, seen=False).count()
         return render_to_response(
                 'home.html', 
                 RequestContext(request, {   'isFollow': isFollow,
                                             'theuser': user,
                                             'head': usermessage.head,
-                                            'intro': usermessage.intro}))
+                                            'intro': usermessage.intro,
+                                            'newsCount': newsCount}))

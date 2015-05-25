@@ -85,17 +85,17 @@ def share(request):
 		for comment in sharedMusic.comments:
 			comment.datetime = comment.datetime.strftime("%Y/%m/%d %H:%M")
 		sharedMusic.datetime = sharedMusic.datetime.strftime("%Y/%m/%d %H:%M")
-	newsCount = UserNews.objects.filter(user = request.user).count()
-	usernews = UserNews.objects.filter(user = request.user)
+
+	#读取新消息的数量
+	newsCount = UserNews.objects.filter(toUser=request.user, seen=False).count()
 	return  render_to_response(
 			'share.html',
-			RequestContext(request,{	'sharedMusics':sharedMusics,
+			RequestContext(request,{	'newsCount': newsCount,
+										'sharedMusics':sharedMusics,
 										'head': usermessage.head,
 										'sharedMusicCount': sharedMusicCount,
 										'followingCount': followingCount,
-										'followedCount': followedCount,
-										'newsCount': newsCount,
-										'usernews': usernews}))
+										'followedCount': followedCount}))
 
 @csrf_exempt
 @login_required
@@ -117,12 +117,18 @@ def comment(request):
 		sharedMusicComment.comment = request.POST['comment']
 		sharedMusicComment.datetime = datetime.now()
 		sharedMusicComment.save()
-		usernews = UserNews()
-		usernews.user = sharedMusicComment.sharedMusic.user
-		usernews.news = '%s 评论了您.' % request.user
-		usernews.sharedmusic = sharedMusicComment.sharedMusic
-		usernews.save()
-		print usernews.news
+
+		print sharedMusicComment.sharedMusic.pk
+		print sharedMusicComment.pk
+
+		#将新评论添加至消息系统中
+		userNews = UserNews()
+		userNews.fromUser = request.user
+		userNews.toUser = sharedMusicComment.sharedMusic.user
+		userNews.newsType = 0
+		userNews.newsID = sharedMusicComment.pk
+		userNews.save()
+
 		return HttpResponseRedirect('/social-music/share/')
 
 @csrf_exempt
@@ -142,22 +148,29 @@ def remove_comment(request):
 @login_required
 def create_fav(request):
 	if request.method == 'POST':
-		sharedMusicID = request.POST['id']
-		sharedMusic = SharedMusic.objects.get(pk=sharedMusicID)
 		try:
-			FavSharedMusic.objects.get(sharedMusic=sharedMusic, user=request.user)
-		except FavSharedMusic.DoesNotExist:
-			favSharedMusic = FavSharedMusic()
-			favSharedMusic.sharedMusic = sharedMusic
-			favSharedMusic.user = request.user
-			favSharedMusic.save()
-			usernews = UserNews()
-			usernews.user = sharedMusicComment.sharedMusic.user
-			usernews.news = '%s 点赞了您.' % request.user
-			usernews.sharedmusic = sharedMusicComment.sharedMusic
-			usernews.save()
-			print usernews.news
-			print "[INFO]social-music.views.create_fav: success"
+			sharedMusicID = request.POST['id']
+			sharedMusic = SharedMusic.objects.get(pk=sharedMusicID)
+			try:
+				FavSharedMusic.objects.get(sharedMusic=sharedMusic, user=request.user)
+				print "[INFO]social-music.views.create_fav: alreadly done"
+			except FavSharedMusic.DoesNotExist:
+				favSharedMusic = FavSharedMusic()
+				favSharedMusic.sharedMusic = sharedMusic
+				favSharedMusic.user = request.user
+				favSharedMusic.save()
+
+				#将新的点赞消息添加至消息系统中
+				userNews = UserNews()
+				userNews.fromUser = request.user
+				userNews.toUser = sharedMusic.user
+				userNews.newsType = 1
+				userNews.newsID = favSharedMusic.pk
+				userNews.save()
+			
+				print "[INFO]social-music.views.create_fav: success"
+		except Exception, e:
+			print e
 		return HttpResponseRedirect('/social-music/share/')
 
 @csrf_exempt
@@ -171,9 +184,27 @@ def remove_fav(request):
 		print "[INFO]social-music.views.remove_fav: success"
 		return HttpResponseRedirect('/social-music/share/')
 
-@csrf_exempt
 @login_required
-def checknews(request):
-	usernews = UserNews.objects.filter(user = request.user)
-	usernews.delete()
-	return HttpResponseRedirect('/social-music/share/')
+def message(request):
+	if request.method == 'GET':
+		usermessage = UserMessage.objects.get(user=request.user)
+
+		if 'IsComment' in request.GET:
+			newsType = 0
+			news = UserNews.objects.filter(toUser=request.user, newsType=0).order_by("-datetime")
+			for n in news:
+				n.obj = SharedMusicComment.objects.get(pk=n.newsID)
+				n.datetime = n.datetime.strftime("%Y/%m/%d %H:%M")
+
+		if 'IsFavour' in request.GET:
+			newsType = 1
+			news = UserNews.objects.filter(toUser=request.user, newsType=1).order_by("-datetime")
+			for n in news:
+				n.obj = FavSharedMusic.objects.get(id=n.newsID)
+				n.datetime = n.datetime.strftime("%Y/%m/%d %H:%M")
+
+		return render_to_response(
+			'messages.html',
+			RequestContext(request,{	'head': usermessage.head,
+										'newsList': news,
+										'newsType': newsType}))

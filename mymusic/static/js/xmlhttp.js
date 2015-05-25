@@ -51,6 +51,12 @@ function send_playmusic_request(value){
     send_get_request(url);
 }
 
+function send_favour_music_request(value){
+    url="/mymusic/create-fav";
+    url = addURLParam(url, "id", value);
+    send_get_request(url);
+}
+
 function send_comment(){ 
     var comment = document.getElementById("comment").value;
     url="/mymusic/comment";

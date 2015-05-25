@@ -11,11 +11,10 @@ from models import UserSong
 from models import Singer
 from models import SongComment
 from models import FavComment
-
+from social_music.models import UserNews
 from datetime import datetime
-
 from pages_assistant import Page_Assistant
-# Create your views here.
+
 import os
 @login_required
 def song_lib(request):
@@ -32,6 +31,8 @@ def song_lib(request):
 		usersongs = UserSong.objects.filter(user=request.user)[b:e]
 		songs = [usersong.song for usersong in usersongs]
 		
+		#读取新消息的数量
+		newsCount = UserNews.objects.filter(toUser=request.user, seen=False).count()
 		return render_to_response(
 			'favour.html', 
 			RequestContext(request, {	'songs': songs,
@@ -39,7 +40,8 @@ def song_lib(request):
 										'page_nums': page_nums,
 										'pre_page': pre_page,
 										'cur_page': cur_page,
-										'nex_page': nex_page}))
+										'nex_page': nex_page,
+										'newsCount': newsCount}))
 
 @login_required
 def play(request):
@@ -72,6 +74,9 @@ def play(request):
 			except FavComment.DoesNotExist:
 				c.isFavour = 0
 		#print songLyric
+
+		#读取新消息的数量
+		newsCount = UserNews.objects.filter(toUser=request.user, seen=False).count()
 		return render_to_response(
 			'play.html', 
 			RequestContext(request, {	'user': request.user,
@@ -83,7 +88,8 @@ def play(request):
 										'page_nums': page_nums,
 										'pre_page': pre_page,
 										'cur_page': cur_page,
-										'nex_page': nex_page})) 
+										'nex_page': nex_page,
+										'newsCount': newsCount})) 
 
 @login_required
 def create_fav(request):
@@ -126,7 +132,9 @@ def singer(request):
 		b, e = page_assistant.get_objects_by_pageno(cur_page)
 		songs = Song.objects.filter(singer=request.GET['id'])[b:e]
 
-		user = request.user		
+		user = request.user
+		#读取新消息的数量
+		newsCount = UserNews.objects.filter(toUser=request.user, seen=False).count()		
 		return render_to_response(
 			'index.html', 
 			RequestContext(request, {	'songs': songs,
@@ -134,7 +142,8 @@ def singer(request):
 										'page_nums': page_nums,
 										'pre_page': pre_page,
 										'cur_page': cur_page,
-										'nex_page': nex_page}))
+										'nex_page': nex_page,
+										'newsCount': newsCount}))
 
 @login_required
 def search_singer(request):
@@ -154,6 +163,8 @@ def search_singer(request):
 		b, e = page_assistant.get_objects_by_pageno(cur_page)
 		singers = Singer.objects.filter(name__contains=key)[b:e]
 
+		#读取新消息的数量
+		newsCount = UserNews.objects.filter(toUser=request.user, seen=False).count()
 		return render_to_response(
 			'singers.html', 
 			RequestContext(request, {	'singers': singers,
@@ -161,7 +172,8 @@ def search_singer(request):
 										'page_nums': page_nums,
 										'pre_page': pre_page,
 										'cur_page': cur_page,
-										'nex_page': nex_page}))
+										'nex_page': nex_page,
+										'newsCount': newsCount}))
 
 @login_required
 def search_song(request):
@@ -179,6 +191,8 @@ def search_song(request):
 		b, e = page_assistant.get_objects_by_pageno(cur_page)
 		songs = Song.objects.filter(title__contains=key)[b:e]
 
+		#读取新消息的数量
+		newsCount = UserNews.objects.filter(toUser=request.user, seen=False).count()
 		return render_to_response(
 			'index.html', 
 			RequestContext(request, {	'songs': songs,
@@ -186,7 +200,8 @@ def search_song(request):
 										'page_nums': page_nums,
 										'pre_page': pre_page,
 										'cur_page': cur_page,
-										'nex_page': nex_page}))
+										'nex_page': nex_page,
+										'newsCount': newsCount}))
 
 @csrf_exempt
 @login_required

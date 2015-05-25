@@ -9,6 +9,6 @@ urlpatterns = patterns('',
     url(r'^remove-comment', views.remove_comment),
     url(r'^create-fav', views.create_fav),
     url(r'^remove-fav', views.remove_fav),
-    url(r'^checknews',views.checknews),
+    url(r'^msg', views.message),
 )
 
