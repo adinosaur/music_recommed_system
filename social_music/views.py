@@ -194,6 +194,8 @@ def message(request):
 			news = UserNews.objects.filter(toUser=request.user, newsType=0).order_by("-datetime")
 			for n in news:
 				n.obj = SharedMusicComment.objects.get(pk=n.newsID)
+				n.seen = True
+				n.save()
 				n.datetime = n.datetime.strftime("%Y/%m/%d %H:%M")
 
 		if 'IsFavour' in request.GET:
@@ -201,6 +203,8 @@ def message(request):
 			news = UserNews.objects.filter(toUser=request.user, newsType=1).order_by("-datetime")
 			for n in news:
 				n.obj = FavSharedMusic.objects.get(id=n.newsID)
+				n.seen = True
+				n.save()
 				n.datetime = n.datetime.strftime("%Y/%m/%d %H:%M")
 
 		return render_to_response(

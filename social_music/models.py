@@ -29,5 +29,5 @@ class UserNews(models.Model):
 	toUser = models.ForeignKey(User, related_name='ToUser')
 	newsType = models.IntegerField()# 0: SharedMusicComment; 1: FavSharedMusic
 	newsID = models.IntegerField()
-	datetime = models.DateTimeField(auto_now=True)
+	datetime = models.DateTimeField(auto_now_add=True)
 	seen = models.BooleanField(default=False)
