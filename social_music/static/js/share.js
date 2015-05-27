@@ -1,6 +1,15 @@
+
 /**
  * Created by an.han on 14-2-20.
  */
+ window.onscroll=function(){
+        var a = document.documentElement.clientHeight;
+        var b = document.documentElement.scrollTop==0? document.body.scrollTop : document.documentElement.scrollTop;
+        var c = document.documentElement.scrollHeight;
+        if(a+b==c)
+            alert('a:'+a+'b:'+b+'c:'+c);
+}
+
 
 window.onload = function () {
     var list = document.getElementById('list');
@@ -204,12 +213,4 @@ window.onload = function () {
 
     }
 }
-    window.onscroll=function(){
-        var a = document.documentElement.clientHeight;
-        var b = document.documentElement.scrollTop==0? document.body.scrollTop : document.documentElement.scrollTop;
-        var c = document.documentElement.scrollHeight;
-        if(a+b==c)
-            alert('a:'+a+'b:'+b+'c:'+c);
-    }
-    
 

@@ -13,14 +13,12 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='UserIntro',
+            name='UserMessage',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('intro', models.CharField(max_length=255)),
+                ('intro', models.CharField(default=b'', max_length=255)),
+                ('head', models.CharField(default=b'default', max_length=255)),
                 ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
             ],
-            options={
-            },
-            bases=(models.Model,),
         ),
     ]

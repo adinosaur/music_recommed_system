@@ -1,0 +1,64 @@
+{% extends "base.html" %} 
+
+{% block cdn %}
+{% endblock %}
+
+{% block share %}
+class="active"
+{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/share.css">
+<div class="row">
+    <div class="page-header">
+            <h5>我的消息<span class="pull-right">{% if newsType == 0 %}评论{% else %}点赞{% endif %}</span></h5>
+        </div>
+    <div class="col-md-2">
+        <nav class="nav nav-tabs nav-justified">
+            
+            <li role="presentation" class="divider"></li>
+            <ul class="nav nav-pills nav-stacked">
+                <li role="presentation"><a href="/social-music/msg?id={{user.id}}&IsComment=1">评论</a></li>
+            </ul>
+            <ul class="nav nav-pills nav-stacked">
+                <li role="presentation"><a href="/social-music/msg?id={{user.id}}&IsFavour=1">点赞</a></li>
+            </ul>
+        </nav>
+    </div>
+    <div class="col-md-10">
+        {% if newsType == 0 %}
+        <div class="comment-list">
+            {% for news in newsList %}
+            <div class="comment-box clearfix" user="self">
+                <img class="myhead" src="{{ MEDIA_URL }}heads/{{head}}" alt=""/>
+                <div class="comment-content">
+                    <p class="comment-text"><span class="user">{{news.obj.user}}</span></p>
+                    <p class="comment-text">回复了@{{user}}：{{news.obj.comment}}</p>
+                    <p style="background: #DEE3E5">回复我的分享：{{ news.obj.sharedMusic.comment }}</p>
+                    <p class="comment-time">
+                        {{ news.datetime }}
+                    </p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% if newsType == 1 %}
+        <div class="comment-list">
+            {% for news in newsList %}
+            <div class="comment-box clearfix" user="self">
+                <img class="myhead" src="{{ MEDIA_URL }}heads/{{head}}" alt=""/>
+                <div class="comment-content">
+                    <p class="comment-text"><span class="user">{{news.obj.user}}赞了我的分享</span></p>
+                    <p style="background: #DEE3E5">@{{user}}：{{ news.obj.sharedMusic.comment }}</p>
+                    <p class="comment-time">
+                        {{ news.datetime }}
+                    </p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

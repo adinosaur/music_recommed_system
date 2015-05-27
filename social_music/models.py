@@ -23,4 +23,11 @@ class SharedMusicComment(models.Model):
 class FavSharedMusic(models.Model):
 	sharedMusic = models.ForeignKey(SharedMusic)
 	user = models.ForeignKey(User)
-		
+
+class UserNews(models.Model):
+	fromUser = models.ForeignKey(User, related_name='FromUser')
+	toUser = models.ForeignKey(User, related_name='ToUser')
+	newsType = models.IntegerField()# 0: SharedMusicComment; 1: FavSharedMusic
+	newsID = models.IntegerField()
+	datetime = models.DateTimeField(auto_now_add=True)
+	seen = models.BooleanField(default=False)

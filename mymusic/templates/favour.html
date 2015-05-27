@@ -25,7 +25,7 @@ class="active"
                 <th><a href="/mymusic/play?id={{song.pk}}" style="color: #34495e">{{song.title}}</a></th>
                 <th><a href="/mymusic/singer?id={{song.singer.id}}" style="color: #34495e">{{song.singer.name}}</a></th>
                 <th><a href=""><span class="glyphicon glyphicon-headphones" aria-hidden="true"></span></a>
-				<a onclick=send_get_request({{song.pk}})"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></a></th>
+				<a onclick="send_get_request({{song.pk}})"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></a></th>
             </tr>
             {% endfor %}
         <tbody>

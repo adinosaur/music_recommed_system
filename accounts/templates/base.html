@@ -60,6 +60,11 @@
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{user}} <span class="glyphicon glyphicon-user" aria-hidden="true"></span<b class="caret"></b></a>
                     <ul class="dropdown-menu">
                         <li><a href="/accounts/home?id={{user.id}}">我的主页</a></li>
+                        <li><a href="/social-music/msg?id={{user.id}}&IsComment=1">消息中心
+                          {% if newsCount != 0 %}
+                          <span class="badge pull-right" style="background-color: #CD4343;">{{ newsCount }}</span>
+                          {% endif %}
+                        </a></li>
                         <li class="divider"></li>
                         <li><a href="/accounts/logout/">退出</a></li>
                     </ul>
