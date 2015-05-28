@@ -9,13 +9,15 @@ from django.contrib.auth.models import User
 from accounts.models import UserMessage 
 from django.db.models import Q
 from mymusic.models import Song
+from mymusic.pages_assistant import Page_Assistant
 from models import Attention
 from models import SharedMusic
 from models import SharedMusicComment
 from models import FavSharedMusic
 from models import UserNews
 from datetime import datetime
-
+from django.core import serializers
+import json
 # Create your views here.
 @csrf_exempt
 @login_required
@@ -97,6 +99,50 @@ def share(request):
 										'followingCount': followingCount,
 										'followedCount': followedCount}))
 
+@login_required
+def share_json(request):
+	"""http://127.0.0.1:8000/social-music/json/share%EF%BC%9Fp=1/"""
+	if request.method == 'GET':
+		print "[INFO]social-music.views.share_json"
+		usermessage = UserMessage.objects.get(user=request.user)
+		attentions = Attention.objects.filter(user=request.user)
+		objQ = Q(user=request.user)
+		for attention in attentions:
+			objQ |= Q(user=attention.attendedUser)
+
+		#将网页分页展示
+		p = request.GET.get('p', '1')
+		page_assistant = Page_Assistant(count=SharedMusic.objects.filter(objQ).count(), page_size=5)
+		pre_page = page_assistant.get_pre_page_no(int(p))
+		cur_page = int(p)
+		nex_page = page_assistant.get_nex_page_no(int(p))
+		page_nums = page_assistant.get_pages_list(cur_page)
+		b, e = page_assistant.get_objects_by_pageno(cur_page)
+		sharedMusics = SharedMusic.objects.filter(objQ).order_by("-datetime")[b:e]
+		
+		sharedMusicCount = SharedMusic.objects.filter(user=request.user).count()
+		followingCount = len(attentions)
+		followedCount = Attention.objects.filter(attendedUser=request.user).count()
+		
+		for sharedMusic in sharedMusics:
+			sharedMusic.comments = SharedMusicComment.objects.filter(sharedMusic=sharedMusic).order_by("datetime")
+			#for comment in sharedMusic.comments:
+			#	comment.datetime = comment.datetime.strftime("%Y/%m/%d %H:%M")
+			#sharedMusic.datetime = sharedMusic.datetime.strftime("%Y/%m/%d %H:%M")
+
+		#读取新消息的数量
+		newsCount = UserNews.objects.filter(toUser=request.user, seen=False).count()
+
+		responseDict = dict()
+		responseDict['newsCount'] = newsCount
+		responseDict['sharedMusics'] = json.loads(serializers.serialize('json', sharedMusics))
+		responseDict['head'] = usermessage.head
+		responseDict['sharedMusicCount'] = sharedMusicCount
+		responseDict['followingCount'] = followingCount
+		responseDict['followedCount'] = followedCount
+		data = json.dumps(responseDict)
+		return HttpResponse(data, content_type='application/json')
+
 @csrf_exempt
 @login_required
 def comment(request):
@@ -120,6 +166,7 @@ def comment(request):
 
 		print sharedMusicComment.sharedMusic.pk
 		print sharedMusicComment.pk
+		print sharedMusicComment.comment
 
 		#将新评论添加至消息系统中
 		userNews = UserNews()
@@ -139,6 +186,11 @@ def remove_comment(request):
 		sharedMusicComment = SharedMusicComment.objects.get(pk=sharedMusicCommentID)
 		if request.user == sharedMusicComment.user:
 			print "[INFO]social-music.views.remove_comment: commentID=%s" %sharedMusicCommentID
+
+			#同时还要删除UserNews中的评论（newsType=0）消息
+			userNews = UserNews.objects.get(newsType=0, newsID=sharedMusicCommentID)
+			userNews.delete()
+
 			sharedMusicComment.delete()
 		else:
 			print "[ERROR]social-music.views.remove_comment: cannot remove commentID=%s" %sharedMusicCommentID
@@ -180,6 +232,11 @@ def remove_fav(request):
 		sharedMusicID = request.POST['id']
 		sharedMusic = SharedMusic.objects.get(pk=sharedMusicID)
 		favSharedMusic = FavSharedMusic.objects.get(sharedMusic=sharedMusic, user=request.user)
+
+		#同时还要删除UserNews中的点赞（newsType=1）消息
+		userNews = UserNews.objects.get(newsType=1, newsID=sharedMusicID)
+		userNews.delete()
+
 		favSharedMusic.delete()
 		print "[INFO]social-music.views.remove_fav: success"
 		return HttpResponseRedirect('/social-music/share/')
