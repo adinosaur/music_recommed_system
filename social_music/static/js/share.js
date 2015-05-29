@@ -67,6 +67,7 @@ window.onload = function () {
      * @param el 点击的元素
      */
     function reply(box, el, img) {
+        var commentList = box.getElementsByClassName('comment-list')[0];
         var textarea = box.getElementsByClassName('comment')[0];
         var commentBox = document.createElement('div');
         commentBox.className = 'comment-box clearfix';
@@ -81,9 +82,7 @@ window.onload = function () {
                 '<a href="javascript:;" class="comment-operate">删除</a>' +
                 '</p>' +
                 '</div>'
-        
         send_social_comment(box.getAttribute('data-shared-music'), textarea.value);
-        var commentList = box.getElementsByClassName('comment-list')[0];
         commentList.appendChild(commentBox);
         textarea.value = '';
         textarea.onblur();
