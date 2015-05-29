@@ -19,7 +19,7 @@
                                 <div class="input-group-addon"><span class="glyphicon glyphicon-user" aria-hidden="true"></span></div>
                                 <input class="form-control" id="id_username" maxlength="30" name="username" placeholder="Username" type="text" />
                             </div>
-                            {% if tips %}
+                            {% if username_tips %}
                             <strong>{{tips_title}}</strong>
                             {{tips_message}}
                             {% endif %}
@@ -29,17 +29,13 @@
                                 <div class="input-group-addon"><span class="glyphicon glyphicon-lock" aria-hidden="true"></span></div>
                                 <input class="form-control" id="id_password" maxlength="30" name="password" placeholder="Password" type="password" />
                             </div>
-                            {% if tips %}
-                            <strong>{{tips_title}}</strong>
-                            {{tips_message}}
-                            {% endif %}
                         </div>
                         <div class="form-group">
                             <div class="input-group">
                                 <div class="input-group-addon"><span class="glyphicon glyphicon-lock" aria-hidden="true"></span></div>
                                 <input class="form-control" id="id_password_again" maxlength="30" name="password_again" placeholder="Password Again" type="password" />
                             </div>
-                            {% if tips %}
+                            {% if password_tips %}
                             <strong>{{tips_title}}</strong>
                             {{tips_message}}
                             {% endif %}
@@ -49,7 +45,7 @@
                                 <div class="input-group-addon"><span class="glyphicon glyphicon-envelope" aria-hidden="true"></span></div>
                                 <input class="form-control" id="id_email" maxlength="30" name="email" placeholder="Email" type="email" />
                             </div>
-                            {% if tips %}
+                            {% if email_tips %}
                             <strong>{{tips_title}}</strong>
                             {{tips_message}}
                             {% endif %}

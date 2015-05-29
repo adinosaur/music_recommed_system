@@ -14,6 +14,7 @@ from mymusic.pages_assistant import Page_Assistant
 from models import UserMessage
 from social_music.models import UserNews
 from social_music.models import Attention
+from django.core.mail import send_mail
 
 @csrf_exempt
 def register(request):
@@ -23,6 +24,9 @@ def register(request):
     else:         
         form = RegistForm(request.POST)
         register_flag = True
+        username_tips = False
+        password_tips = False
+        email_tips = False
         tips_message = ''
 
         if form.is_valid():
@@ -36,23 +40,38 @@ def register(request):
                 pass
             else:
                 tips_message = u'用户名已存在'
+                username_tips = True
                 register_flag = False
 
             if register_flag == True and password != password_again:
                 tips_message = u'两次密码不一致'
+                password_tips = True
+                register_flag = False
+                
+            sendEmail = dict()
+            sendEmail['from'] = 'dinoshuo@163.com'
+            with open('media/email/register.txt') as f:
+                allEmail = f.read().split('\n')
+                sendEmail['subject'] = allEmail[0]
+                sendEmail['text'] = ''.join(allEmail[1:]) % username.encode('utf-8')
+            
+            emailReturnNo = send_mail(sendEmail['subject'], sendEmail['text'], sendEmail['from'], [email], fail_silently=False)
+            if 0 == emailReturnNo:
+                tips_message = u'邮箱有误'
+                email_tips = True
                 register_flag = False
 
             if register_flag:
                 user = User.objects.create_user(username=username,
                                                 password=password,
-                                                email=email)   
+                                                email=email)
+
                 user.save()
-                
                 usermessage = UserMessage()
-                
                 print type(request.user)
                 usermessage.user = user
                 usermessage.save()
+
                 return HttpResponseRedirect('/accounts/login/')
             
         return render_to_response(
@@ -60,7 +79,10 @@ def register(request):
             RequestContext(request, {'form': form,
                                      'tips': True,
                                      'tips_title': u'错误!',
-                                     'tips_message': tips_message}))
+                                     'tips_message': tips_message,
+                                     'username_tips': username_tips,
+                                     'password_tips': password_tips,
+                                     'email_tips': email_tips}))
 
 
 @csrf_exempt

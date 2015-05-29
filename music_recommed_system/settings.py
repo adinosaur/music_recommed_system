@@ -98,3 +98,11 @@ MEDIA_ROOT = 'media/'
                 
 # 媒体文件的 url 设置，也就是在模板里使用到时候，需要用到这个变量，注意最后面到 ‘/’ 是必须加上的
 MEDIA_URL = '/media/'
+
+SERVER_EMAIL = 'dinoshuo@163.com'
+EMAIL_HOST= 'smtp.163.com'
+EMAIL_PORT= 25
+EMAIL_HOST_USER = 'dinoshuo@163.com'
+EMAIL_HOST_PASSWORD = 'lwmnnctoclmpipet'
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER 
