@@ -1,6 +1,16 @@
+
+
 /**
  * Created by an.han on 14-2-20.
  */
+ window.onscroll=function(){
+        var a = document.documentElement.clientHeight;
+        var b = document.documentElement.scrollTop==0? document.body.scrollTop : document.documentElement.scrollTop;
+        var c = document.documentElement.scrollHeight;
+        if(a+b==c)
+            alert('a:'+a+'b:'+b+'c:'+c);
+}
+
 
 window.onload = function () {
     var list = document.getElementById('list');
@@ -57,8 +67,6 @@ window.onload = function () {
      * @param el 点击的元素
      */
     function reply(box, el, img) {
-        send_social_comment(box.getAttribute('data-shared-music'), el.parentNode.children[0].value);
-        var commentList = box.getElementsByClassName('comment-list')[0];
         var textarea = box.getElementsByClassName('comment')[0];
         var commentBox = document.createElement('div');
         commentBox.className = 'comment-box clearfix';
@@ -73,6 +81,9 @@ window.onload = function () {
                 '<a href="javascript:;" class="comment-operate">删除</a>' +
                 '</p>' +
                 '</div>'
+        
+        send_social_comment(box.getAttribute('data-shared-music'), textarea.value);
+        var commentList = box.getElementsByClassName('comment-list')[0];
         commentList.appendChild(commentBox);
         textarea.value = '';
         textarea.onblur();
@@ -144,7 +155,7 @@ window.onload = function () {
 
                 //回复按钮蓝
                 case 'btn':
-                   reply(el.parentNode.parentNode.parentNode, el, el.getAttribute('data-head'));
+                    reply(el.parentNode.parentNode.parentNode, el, el.getAttribute('data-head'));
                     break
 
                 //回复按钮灰
@@ -204,4 +215,5 @@ window.onload = function () {
 
     }
 }
+
 

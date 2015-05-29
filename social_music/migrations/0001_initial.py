@@ -20,19 +20,12 @@ class Migration(migrations.Migration):
                 ('attendedUser', models.ForeignKey(related_name='attendedUser', to=settings.AUTH_USER_MODEL)),
                 ('user', models.ForeignKey(related_name='attendingUser', to=settings.AUTH_USER_MODEL)),
             ],
-            options={
-            },
-            bases=(models.Model,),
         ),
         migrations.CreateModel(
             name='FavSharedMusic',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('seen', models.BooleanField(default=False)),
             ],
-            options={
-            },
-            bases=(models.Model,),
         ),
         migrations.CreateModel(
             name='SharedMusic',
@@ -44,9 +37,6 @@ class Migration(migrations.Migration):
                 ('song', models.ForeignKey(to='mymusic.Song')),
                 ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
             ],
-            options={
-            },
-            bases=(models.Model,),
         ),
         migrations.CreateModel(
             name='SharedMusicComment',
@@ -54,13 +44,9 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('comment', models.CharField(max_length=255)),
                 ('datetime', models.DateTimeField()),
-                ('seen', models.BooleanField(default=False)),
                 ('sharedMusic', models.ForeignKey(to='social_music.SharedMusic')),
                 ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
             ],
-            options={
-            },
-            bases=(models.Model,),
         ),
         migrations.CreateModel(
             name='UserNews',
@@ -68,23 +54,20 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('newsType', models.IntegerField()),
                 ('newsID', models.IntegerField()),
+                ('datetime', models.DateTimeField(auto_now_add=True)),
+                ('seen', models.BooleanField(default=False)),
                 ('fromUser', models.ForeignKey(related_name='FromUser', to=settings.AUTH_USER_MODEL)),
                 ('toUser', models.ForeignKey(related_name='ToUser', to=settings.AUTH_USER_MODEL)),
             ],
-            options={
-            },
-            bases=(models.Model,),
         ),
         migrations.AddField(
             model_name='favsharedmusic',
             name='sharedMusic',
             field=models.ForeignKey(to='social_music.SharedMusic'),
-            preserve_default=True,
         ),
         migrations.AddField(
             model_name='favsharedmusic',
             name='user',
             field=models.ForeignKey(to=settings.AUTH_USER_MODEL),
-            preserve_default=True,
         ),
     ]

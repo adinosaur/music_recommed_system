@@ -20,8 +20,5 @@ class Migration(migrations.Migration):
                 ('head', models.CharField(default=b'default', max_length=255)),
                 ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
             ],
-            options={
-            },
-            bases=(models.Model,),
         ),
     ]
