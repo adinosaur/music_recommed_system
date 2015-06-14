@@ -22,8 +22,8 @@
     {% block cdn %}
     {% endblock %}
   </head>
-
   <body>
+    <script src= "{{ STATIC_URL }}js/search.js"></script>
     <nav class="navbar navbar-inverse">
       <div class="container">
         <div class="navbar-header">
@@ -48,10 +48,17 @@
             <form action="/mymusic/search-song" method="GET" class="navbar-form navbar-left" role="search">
                 <div class="form-group">
                     <div class="input-group">             
-                        <input type="text" name="key" class="form-control" placeholder="搜索音乐，歌手">
+                        <input data-toggle="dropdown" type="text" name="key" class="form-control" placeholder="搜索音乐，歌手">
                         <span class="input-group-btn">
                             <button type="submit" class="btn"><span class="fui-search"></span></button>
                         </span>
+                        <ul class="dropdown-menu list-group" role="menu" aria-labelledby="dLabel">
+                            <li class="list-group-item">Cras justo odio</li>
+                            <li class="list-group-item">Dapibus ac facilisis in</li>
+                            <li class="list-group-item">Morbi leo risus</li>
+                            <li class="list-group-item">Porta ac consectetur ac</li>
+                            <li class="list-group-item">Vestibulum at eros</li>
+                        </ul>
                     </div>
                 </div>
             </form>

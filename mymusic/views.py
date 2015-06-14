@@ -14,8 +14,10 @@ from models import FavComment
 from social_music.models import UserNews
 from datetime import datetime
 from pages_assistant import Page_Assistant
-
+from  search_prompt import SearchPromptList
+import json
 import os
+
 @login_required
 def song_lib(request):
 	if request.method == 'GET':
@@ -202,6 +204,16 @@ def search_song(request):
 										'cur_page': cur_page,
 										'nex_page': nex_page,
 										'newsCount': newsCount}))
+
+@login_required
+def search_prompt(request):
+	if request.method == 'GET':
+		searchPromptList = SearchPromptList()
+		msg = request.GET['m']
+		topn = 5
+		data = json.dumps(searchPromptList.query(msg, topn))
+		return HttpResponse(data, content_type='application/json')
+
 
 @csrf_exempt
 @login_required

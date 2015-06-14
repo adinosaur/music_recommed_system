@@ -31,3 +31,4 @@ class UserNews(models.Model):
 	newsID = models.IntegerField()
 	datetime = models.DateTimeField(auto_now_add=True)
 	seen = models.BooleanField(default=False)
+

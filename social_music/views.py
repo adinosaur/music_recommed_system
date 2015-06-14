@@ -18,7 +18,7 @@ from models import UserNews
 from datetime import datetime
 from django.core import serializers
 import json
-# Create your views here.
+
 @csrf_exempt
 @login_required
 def follow(request):
