@@ -7,6 +7,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
     <link href="http://cdn.bootcss.com/bootstrap/3.3.4/css/bootstrap.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="http://cdn.bootcss.com/bootstrap/3.3.4/css/bootstrap.css.map">
     
@@ -113,19 +114,14 @@
     <script src="http://cdn.bootcss.com/jquery/2.1.3/jquery.min.js"></script>
     <script src="http://cdn.bootcss.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
     <script>
-    
-    function heredoc(fn) {
-      return fn.toString().split('\n').slice(1,-1).join('\n') + '\n'
-    }
-    var tmpl = heredoc(function(){/*{{ songLyric }}*/});
     {% load staticfiles %}
     var simplePlayer = new Player({
     container: document.getElementById('simplePlayer'),
       image: '{{ MEDIA_URL }}music/{{song.pic_link}}',
       theme: 'simple',
       classes: {
-        list: 'fa fa-list',
-        prev: 'fa fa-step-forward',
+        //list: 'fa fa-list',
+        prev: 'fa fa-step-backward',
         play: 'fa fa-play',
         next: 'fa fa-step-forward',
         pause: 'fa fa-pause',
@@ -137,10 +133,9 @@
       url: '{{ MEDIA_URL }}music/{{song.song_link}}',
       artist: '{{ song.singer }}',
       image: '{{ MEDIA_URL }}music/{{song.pic_link}}',
-      lyric: tmpl,
     }
     ]);
-    simplePlayer.play(0);
+    //simplePlayer.play(0);
   </script>
   </body>
 </html>

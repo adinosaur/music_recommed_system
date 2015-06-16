@@ -13,7 +13,7 @@
 <script src= "{{ STATIC_URL }}js/xmlhttp.js"></script>
 <script src= "{{ STATIC_URL }}js/favour.js"></script>
 <script src= "{{ STATIC_URL }}h5player/dist/player-with-css.min.js"></script> 
-<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+<!-- in base.html <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css"> !-->
 <div class="row">
   <div class="col-xs-12 col-md-8">
       <div class="row">
@@ -148,7 +148,7 @@
     //theme: 'simple',
     classes: {
       list: 'fa fa-list',
-      prev: 'fa fa-step-forward',
+      prev: 'fa fa-step-backward',
       play: 'fa fa-play',
       next: 'fa fa-step-forward',
       pause: 'fa fa-pause',
@@ -163,6 +163,6 @@
     lyric: tmpl,
   }
   ]);
-      player.play(0);
+    //player.play(0);
 </script>
 {% endblock %}

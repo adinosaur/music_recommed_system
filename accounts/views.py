@@ -137,7 +137,8 @@ def index(request):
         newsCount = UserNews.objects.filter(toUser=request.user, seen=False).count()
         return render_to_response(
             'index.html', 
-            RequestContext(request, {   'songs': songs,
+            RequestContext(request, {  'song': songs[0],
+                                       'songs': songs,
                                         'user': request.user,
                                         'page_nums': page_nums,
                                         'pre_page': pre_page,
