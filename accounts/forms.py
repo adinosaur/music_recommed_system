@@ -75,7 +75,7 @@ class RegistForm(forms.Form):
             ),  
     )
 
-    captcha = CaptchaField()
+    #captcha = CaptchaField()
     
     def clean(self):  
         if not self.is_valid():  
