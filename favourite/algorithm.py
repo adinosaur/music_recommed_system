@@ -84,4 +84,24 @@ def set_favourite(uid, sid, val):
         t.save()
     except Favourite.DoesNotExist:
         t = Favourite(user_id = uid, song_id = sid, love = val)
-    	t.save()
+        t.save()
+
+#以下改动作者:dinosaur
+#返回歌曲的object的list
+def get_similar_song2(songid, n = 1):
+    n = int(n)
+    res = set()
+    res = _get_similar_song2(songid, 5, n, res)
+    res = _get_similar_song2(songid, 3, n, res)
+    return random.sample(list(res), min(len(res), n))
+    
+#辅助函数
+def _get_similar_song2(songid, limit, n, res):
+    if len(res) >= n:
+        return res
+    users = Favourite.objects.filter(song_id = songid, love__gte = limit)
+    for u in users:
+        res = res | set([s.song for s in Favourite.objects.filter(user_id = u.id, love__gte = limit).exclude(song_id = songid)])
+        if len(res) >= n:
+            break
+    return res

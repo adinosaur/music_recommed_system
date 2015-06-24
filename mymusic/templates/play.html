@@ -22,8 +22,8 @@
         </div>
         <div class="col-xs-6 col-md-6"> 
           <div id="title">
-            <h3><small>歌曲：</small>{{song.title}}</h3>
-            <h4><small>歌手：</small>{{song.singer}}</h4>
+            <h5><small>歌曲：</small>{{song.title}}</h5>
+            <h6><small>歌手：</small>{{song.singer}}</h6>
             <a class="btn btn-primary" onclick="send_playmusic_request({{song.pk}});playmusic()"><span class="glyphicon glyphicon-play-circle" aria-hidden="true">立即播放</span></a>
             <a class="btn btn-info" onclick="send_favour_music_request({{song.pk}})"><span class="glyphicon glyphicon-ok-circle" aria-hidden="true">收藏</span></a>
             <a class="btn btn-info" data-target="#myModal" data-toggle="modal" onclick="share()"><span class="glyphicon glyphicon-share" arai-hidden="true">分享</span></a>
@@ -114,6 +114,25 @@
         {% endfor %}
       </ul>
       </body>
+  </div>
+  <div class="col-md-4">
+    <h6>相似的歌曲</h6>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>歌曲</th>
+                <th>歌手</th>
+            </tr>
+        </thead>
+        <tbody>
+        	{% for song in similarSongsList %}
+            <tr>
+                <th><a href="/mymusic/play?id={{song.pk}}" style="color: #34495e">{{song.title}}</th>
+                <th><a href="/mymusic/singer?id={{song.singer.id}}" style="color: #34495e">{{song.singer.name}}</th>
+            </tr>
+            {% endfor %}
+        <tbody>
+    </table>
   </div>
 </div>
 <script type="text/javascript">

@@ -17,6 +17,8 @@ from datetime import datetime
 from pages_assistant import Page_Assistant
 from search_prompt import SearchPromptList
 from favourite.lastSong import getLastPlayedSong
+from favourite.algorithm import get_similar_song
+from favourite.algorithm import get_similar_song2
 import json
 import os
 
@@ -90,6 +92,10 @@ def play(request):
 		#上一次播放的音乐
 		last_song = getLastPlayedSong(request.user)
 		
+		#相似的歌曲
+		similarSongsList = get_similar_song2(song_id, 5)
+		print similarSongsList
+		
 		return render_to_response(
 			'play.html', 
 			RequestContext(request, {	'last_song': last_song,
@@ -103,7 +109,8 @@ def play(request):
 										'pre_page': pre_page,
 										'cur_page': cur_page,
 										'nex_page': nex_page,
-										'newsCount': newsCount})) 
+										'newsCount': newsCount,
+										'similarSongsList': similarSongsList})) 
 
 @login_required
 def create_fav(request):
