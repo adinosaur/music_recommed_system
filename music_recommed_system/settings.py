@@ -40,6 +40,7 @@ INSTALLED_APPS = (
     'accounts',
     'mymusic',
     'social_music',
+    'favourite',
     'captcha',
 )
 

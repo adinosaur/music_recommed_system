@@ -13,5 +13,6 @@ urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^media/(?P<path>.*)$', 'django.views.static.serve',{'document_root': 'media/'}),
     url( r'^static/(?P<path>.*)$', 'django.views.static.serve',{'document_root': 'static/' }),
+    url(r'^favourite/', include('favourite.urls')),
     url(r'^captcha/', include('captcha.urls')),
 ]

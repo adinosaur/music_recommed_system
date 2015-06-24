@@ -12,9 +12,11 @@ from models import Singer
 from models import SongComment
 from models import FavComment
 from social_music.models import UserNews
+from favourite.algorithm import update_favourite
 from datetime import datetime
 from pages_assistant import Page_Assistant
-from  search_prompt import SearchPromptList
+from search_prompt import SearchPromptList
+from favourite.lastSong import getLastPlayedSong
 import json
 import os
 
@@ -35,9 +37,14 @@ def song_lib(request):
 		
 		#读取新消息的数量
 		newsCount = UserNews.objects.filter(toUser=request.user, seen=False).count()
+		
+		#上一次播放的音乐
+		last_song = getLastPlayedSong(request.user)
+		
 		return render_to_response(
 			'favour.html', 
-			RequestContext(request, {	'songs': songs,
+			RequestContext(request, {	'last_song': last_song,
+										'songs': songs,
 										'user': request.user,
 										'page_nums': page_nums,
 										'pre_page': pre_page,
@@ -79,9 +86,14 @@ def play(request):
 
 		#读取新消息的数量
 		newsCount = UserNews.objects.filter(toUser=request.user, seen=False).count()
+		
+		#上一次播放的音乐
+		last_song = getLastPlayedSong(request.user)
+		
 		return render_to_response(
 			'play.html', 
-			RequestContext(request, {	'user': request.user,
+			RequestContext(request, {	'last_song': last_song,
+										'user': request.user,
 										'song': song,
 										'head': head,
 										'songLyric': songLyric,
@@ -107,6 +119,11 @@ def create_fav(request):
 			usersong.song = Song.objects.get(pk=request.GET['id'])
 			usersong.save()
 			print "user:%s favour %s" %(usersong.user, usersong.song)
+			
+			#favourite模块
+			behave = 'collected'
+			update_favourite(usersong.user.pk, usersong.song.pk, behave)
+			print "[INFO]create_fav: user_id:%s, song_id:%s, %s" %(usersong.user.pk, usersong.song.pk, behave)
 		else:
 			pass
 		return HttpResponse('create_fav')
@@ -136,10 +153,15 @@ def singer(request):
 
 		user = request.user
 		#读取新消息的数量
-		newsCount = UserNews.objects.filter(toUser=request.user, seen=False).count()		
+		newsCount = UserNews.objects.filter(toUser=request.user, seen=False).count()
+		
+		#上一次播放的音乐
+		last_song = getLastPlayedSong(request.user)
+		
 		return render_to_response(
 			'index.html', 
-			RequestContext(request, {	'songs': songs,
+			RequestContext(request, {	'last_song': last_song,
+										'songs': songs,
 										'user': request.user,
 										'page_nums': page_nums,
 										'pre_page': pre_page,
@@ -167,9 +189,14 @@ def search_singer(request):
 
 		#读取新消息的数量
 		newsCount = UserNews.objects.filter(toUser=request.user, seen=False).count()
+		
+		#上一次播放的音乐
+		last_song = getLastPlayedSong(request.user)
+		
 		return render_to_response(
 			'singers.html', 
-			RequestContext(request, {	'singers': singers,
+			RequestContext(request, {	'last_song': last_song,
+										'singers': singers,
 										'user': request.user,
 										'page_nums': page_nums,
 										'pre_page': pre_page,
@@ -195,9 +222,14 @@ def search_song(request):
 
 		#读取新消息的数量
 		newsCount = UserNews.objects.filter(toUser=request.user, seen=False).count()
+		
+		#上一次播放的音乐
+		last_song = getLastPlayedSong(request.user)
+		
 		return render_to_response(
 			'index.html', 
-			RequestContext(request, {	'songs': songs,
+			RequestContext(request, {	'last_song': last_song,
+										'songs': songs,
 										'user': request.user,
 										'page_nums': page_nums,
 										'pre_page': pre_page,

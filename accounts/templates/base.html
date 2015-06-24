@@ -117,7 +117,7 @@
     {% load staticfiles %}
     var simplePlayer = new Player({
     container: document.getElementById('simplePlayer'),
-      image: '{{ MEDIA_URL }}music/{{song.pic_link}}',
+      image: '{{ MEDIA_URL }}music/{{last_song.pic_link}}',
       theme: 'simple',
       classes: {
         //list: 'fa fa-list',
@@ -129,10 +129,10 @@
     });
     simplePlayer.setSongs([
     {
-      name: '{{ song.title }}',
-      url: '{{ MEDIA_URL }}music/{{song.song_link}}',
-      artist: '{{ song.singer }}',
-      image: '{{ MEDIA_URL }}music/{{song.pic_link}}',
+      name: '{{ last_song.title }}',
+      url: '{{ MEDIA_URL }}music/{{last_song.song_link}}',
+      artist: '{{ last_song.singer }}',
+      image: '{{ MEDIA_URL }}music/{{last_song.pic_link}}',
     }
     ]);
     //simplePlayer.play(0);

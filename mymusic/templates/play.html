@@ -24,7 +24,7 @@
           <div id="title">
             <h3><small>歌曲：</small>{{song.title}}</h3>
             <h4><small>歌手：</small>{{song.singer}}</h4>
-            <a class="btn btn-primary" onclick="send_playmusic_request({{song.pk}})" href="/mymusic/play?id={{song.pk}}"><span class="glyphicon glyphicon-play-circle" aria-hidden="true">立即播放</span></a>
+            <a class="btn btn-primary" onclick="send_playmusic_request({{song.pk}});playmusic()"><span class="glyphicon glyphicon-play-circle" aria-hidden="true">立即播放</span></a>
             <a class="btn btn-info" onclick="send_favour_music_request({{song.pk}})"><span class="glyphicon glyphicon-ok-circle" aria-hidden="true">收藏</span></a>
             <a class="btn btn-info" data-target="#myModal" data-toggle="modal" onclick="share()"><span class="glyphicon glyphicon-share" arai-hidden="true">分享</span></a>
           </div>
@@ -163,6 +163,8 @@
     lyric: tmpl,
   }
   ]);
-    //player.play(0);
+  function playmusic(){
+  	player.play(0);
+  }
 </script>
 {% endblock %}

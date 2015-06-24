@@ -9,7 +9,11 @@ from django.contrib.auth.models import User
 from accounts.models import UserMessage 
 from django.db.models import Q
 from mymusic.models import Song
+
 from mymusic.pages_assistant import Page_Assistant
+from favourite.algorithm import update_favourite
+from favourite.lastSong import getLastPlayedSong
+
 from models import Attention
 from models import SharedMusic
 from models import SharedMusicComment
@@ -72,6 +76,10 @@ def share(request):
 		sharedmusic.song = song
 		sharedmusic.datetime = datetime.now()
 		sharedmusic.save()
+		
+		behave = 'shared'
+		update_favourite(sharedmusic.user.pk, sharedmusic.song.pk, behave)
+		print "[INFO]social-music.views.share: user_id:%s, song_id:%s, %s" %(sharedmusic.user.pk, sharedmusic.song.pk, behave)
 
 	attentions = Attention.objects.filter(user=request.user)
 	objQ = Q(user=request.user)
@@ -90,9 +98,14 @@ def share(request):
 
 	#读取新消息的数量
 	newsCount = UserNews.objects.filter(toUser=request.user, seen=False).count()
+	
+	#上一次播放的音乐
+	last_song = getLastPlayedSong(request.user)
+	
 	return  render_to_response(
 			'share.html',
-			RequestContext(request,{	'newsCount': newsCount,
+			RequestContext(request,{	'last_song': last_song,
+										'newsCount': newsCount,
 										'sharedMusics':sharedMusics,
 										'head': usermessage.head,
 										'sharedMusicCount': sharedMusicCount,
@@ -132,8 +145,12 @@ def share_json(request):
 
 		#读取新消息的数量
 		newsCount = UserNews.objects.filter(toUser=request.user, seen=False).count()
+		
+		#上一次播放的音乐
+		last_song = getLastPlayedSong(request.user)
 
 		responseDict = dict()
+		responseDict['last_song'] = last_song
 		responseDict['newsCount'] = newsCount
 		responseDict['sharedMusics'] = json.loads(serializers.serialize('json', sharedMusics))
 		responseDict['head'] = usermessage.head
@@ -263,9 +280,13 @@ def message(request):
 				n.seen = True
 				n.save()
 				n.datetime = n.datetime.strftime("%Y/%m/%d %H:%M")
+				
+		#上一次播放的音乐
+		last_song = getLastPlayedSong(request.user)
 
 		return render_to_response(
 			'messages.html',
-			RequestContext(request,{	'head': usermessage.head,
+			RequestContext(request,{	'last_song': last_song,
+										'head': usermessage.head,
 										'newsList': news,
 										'newsType': newsType}))

@@ -15,6 +15,7 @@ from models import UserMessage
 from social_music.models import UserNews
 from social_music.models import Attention
 from django.core.mail import send_mail
+from favourite.lastSong import getLastPlayedSong
 
 @csrf_exempt
 def register(request):
@@ -135,16 +136,20 @@ def index(request):
 
         #读取新消息的数量
         newsCount = UserNews.objects.filter(toUser=request.user, seen=False).count()
+        
+        #上一次播放的音乐
+        last_song = getLastPlayedSong(request.user)
+        
         return render_to_response(
             'index.html', 
-            RequestContext(request, {  'song': songs[0],
+            RequestContext(request, {  'last_song': last_song,
                                        'songs': songs,
                                         'user': request.user,
                                         'page_nums': page_nums,
                                         'pre_page': pre_page,
                                         'cur_page': cur_page,
                                         'nex_page': nex_page,
-                                        'newsCount': newsCount}))   
+                                        'newsCount': newsCount}))
 
 @login_required
 def home(request):
@@ -166,9 +171,14 @@ def home(request):
 
         #读取新消息的数量
         newsCount = UserNews.objects.filter(toUser=request.user, seen=False).count()
+        
+        #上一次播放的音乐
+        last_song = getLastPlayedSong(request.user)
+        
         return render_to_response(
                 'home.html', 
-                RequestContext(request, {   'isFollow': isFollow,
+                RequestContext(request, {   'last_song': last_song,
+                                            'isFollow': isFollow,
                                             'theuser': user,
                                             'head': usermessage.head,
                                             'intro': usermessage.intro,
